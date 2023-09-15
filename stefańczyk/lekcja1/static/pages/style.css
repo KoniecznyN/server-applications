@@ -1,15 +1,26 @@
 * {
-    font-size: 2em;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-size: 1.5em;
 }
 
-#first {
+p {
+    width: 100%;
+    height: 200px;
+    background-color: grey;
+    padding: 20px;
+    text-align: center;
+}
+
+#koty {
     color: blue;
 }
 
-#second {
+#auta {
     color: red;
 }
 
-#third {
+#drzewa {
     color: green;
 }

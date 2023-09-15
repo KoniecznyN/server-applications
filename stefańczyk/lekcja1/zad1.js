@@ -1,21 +1,23 @@
-const express = require("express")
-const app = express()
+const express = require("express");
+const app = express();
 const PORT = 3000;
 
-let path = require("path")
+let path = require("path");
 
-app.get("/index", function (req, res) {
-    res.sendFile(path.join(__dirname, "/static/pages/index.html"))
-})
+app.use(express.static(__dirname + "/static/pages"));
 
-app.get("/index2", function (req, res) {
-    res.sendFile(path.join(__dirname, "/static/pages/index2.html"))
-})
+app.get("/koty", function (req, res) {
+  res.sendFile(path.join(__dirname, "/static/pages/index.html"));
+});
 
-app.get("/index3", function (req, res) {
-    res.sendFile(path.join(__dirname, "/static/pages/index3.html"))
-})
+app.get("/auta", function (req, res) {
+  res.sendFile(path.join(__dirname, "/static/pages/index2.html"));
+});
+
+app.get("/drzewa", function (req, res) {
+  res.sendFile(path.join(__dirname, "/static/pages/index3.html"));
+});
 
 app.listen(PORT, function () {
-    console.log("start");
-})
+  console.log("start");
+});
