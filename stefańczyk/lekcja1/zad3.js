@@ -5,7 +5,7 @@ const PORT = 3000;
 function change(value, toRad) {
   let result = 0;
   let toRadb = toRad === "true";
-  //   let toRadb = JSON.parse(toRad);
+  // let toRadb = JSON.parse(toRad);
   if (toRadb) {
     result = (3.14 * value) / 180;
     return value + " stopni to: " + result + " radianów.";
@@ -18,7 +18,6 @@ function change(value, toRad) {
 app.get("/", (req, res) => {
   let value = req.query.value;
   let toRad = req.query.toRad;
-  console.log(toRad);
   res.send(change(value, toRad));
 });
 
