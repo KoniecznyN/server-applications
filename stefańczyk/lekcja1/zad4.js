@@ -2,22 +2,22 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
-function random() {
+const linksAmount = 50;
+const maxProductId = 100;
+
+function generateLinks() {
   let result = "";
-  for (i = 0; i < 50; i++) {
-    const number = Math.floor(Math.random() * (50 - 1)) + 1;
-    result +=
-      '<a style="font-size: 1.5em; font-family: monospace" href="/product/' +
-      number +
-      '">strona' +
-      number +
-      "</a> <br>";
+  for (i = 0; i < linksAmount; ++i) {
+    const productId = Math.floor(Math.random() * (maxProductId + 1));
+    result += `<a style="font-size: 1.5em; font-family: monospace" href="/product/${productId}"> Strona ${productId} </a> <br>`;
   }
   return result;
 }
 
+const links = generateLinks();
+
 app.get("/", (req, res) => {
-  res.send(random());
+  res.send(links);
 });
 
 app.get("/product/:id", (req, res) => {
