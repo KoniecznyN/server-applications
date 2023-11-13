@@ -1,34 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <script src="server002.js"></script>
-    <title>Zad1</title>
-</head>
+    <title>Zad2</title>
+  </head>
 
-<body>
+  <body>
     <h1>02 - fetch, inputs, select, no form</h1>
-    <input type="text" value="100" name="pierwszaLiczba">
-    <input type="text" value="200" name="drugaLiczba">
+    <input id="firstInput" type="text" value="100" name="pierwszaLiczba" />
+    <input id="secondInput" type="text" value="200" name="drugaLiczba" />
     <select name="list" id="list">
-        <option value="suma">suma</option>
-        <option value="różnica">różnica</option>
-        <option value="iloczyn">iloczyn</option>
-        <option value="iloraz">iloraz</option>
-        <option value="wszystko">wsyzstko</option>
+      <option value="suma">suma</option>
+      <option value="różnica">różnica</option>
+      <option value="iloczyn">iloczyn</option>
+      <option value="iloraz">iloraz</option>
+      <option value="wszystko">wsyzstko</option>
     </select>
     <div class="btn" id="btn">klik</div>
     <script>
-        const button = document.getElementById("btn")
-        button.onclick(){
-
+      function wynik(pierwszaLiczba, drugaLiczba, działanie) {
+        let object = [];
+        let wynik1 = pierwszaLiczba + drugaLiczba;
+        let wynik2 = pierwszaLiczba - drugaLiczba;
+        let wynik3 = pierwszaLiczba * drugaLiczba;
+        let wynik4 = pierwszaLiczba / drugaLiczba;
+        switch (działanie) {
+          case "suma":
+            object = {
+              message: "suma dwóch liczb",
+              wynik: JSON.stringify(wynik1, null, 5),
+            };
+            break;
+          case "różnica":
+            object = {
+              message: "róznica dwóch liczb",
+              wynik: JSON.stringify(wynik2, null, 5),
+            };
+            break;
+          case "iloczyn":
+            object = {
+              message: "iloczyn dwóch liczb",
+              wynik: JSON.stringify(wynik3, null, 5),
+            };
+            break;
+          case "iloraz":
+            object = {
+              message: "iloraz dwóch liczb",
+              wynik: JSON.stringify(wynik4, null, 5),
+            };
+            break;
+          case "wszystko":
+            object = [
+              {
+                message: "suma dwóch liczb",
+                wynik: JSON.stringify(wynik1, null, 5),
+              },
+              {
+                message: "róznica dwóch liczb",
+                wynik: JSON.stringify(wynik2, null, 5),
+              },
+              {
+                message: "iloczyn dwóch liczb",
+                wynik: JSON.stringify(wynik3, null, 5),
+              },
+              {
+                message: "iloraz dwóch liczb",
+                wynik: JSON.stringify(wynik4, null, 5),
+              },
+            ];
         }
+        return object;
+      }
 
+      const btn = document.getElementById("btn");
+      const firstInput = parseInt(document.getElementById("firstInput").value);
+      const secondInput = parseInt(
+        document.getElementById("secondInput").value
+      );
+
+      const list = document.getElementById("list");
+      btn.onclick = function () {
+        const data = JSON.stringify(wynik(firstInput, secondInput, list.value));
+
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: data,
+        };
+
+        fetch("/test", options)
+          .then((response) => response.json()) // konwersja na obiekt json, jeśli konieczne
+          .then((data) => alert(JSON.stringify(data, null, 5))) // sformatowane z wcięciami dane odpowiedzi z serwera
+          .catch((error) => console.log(error));
+      };
     </script>
-</body>
-
+  </body>
 </html>
