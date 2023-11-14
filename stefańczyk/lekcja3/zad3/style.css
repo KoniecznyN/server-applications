@@ -1,0 +1,41 @@
+* {
+  font-family: monospace;
+}
+
+h1 {
+  color: blue;
+  text-decoration: underline;
+}
+
+#btn {
+  width: 100px;
+  height: 100px;
+  color: white;
+  background-color: blue;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#del {
+  width: 100px;
+  height: 100px;
+  color: white;
+  background-color: red;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#show {
+  width: 100px;
+  height: 100px;
+  color: white;
+  background-color: greenyellow;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

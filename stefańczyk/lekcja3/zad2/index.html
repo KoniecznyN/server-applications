@@ -77,13 +77,14 @@
       }
 
       const btn = document.getElementById("btn");
-      const firstInput = parseInt(document.getElementById("firstInput").value);
-      const secondInput = parseInt(
-        document.getElementById("secondInput").value
-      );
-
-      const list = document.getElementById("list");
       btn.onclick = function () {
+        const firstInput = parseInt(
+          document.getElementById("firstInput").value
+        );
+        const secondInput = parseInt(
+          document.getElementById("secondInput").value
+        );
+        const list = document.getElementById("list");
         const data = JSON.stringify(wynik(firstInput, secondInput, list.value));
 
         const options = {
