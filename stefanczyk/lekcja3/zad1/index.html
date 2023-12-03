@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="server001.js"></script>
+    <title>Zad1</title>
+</head>
+
+<body>
+    <h1>01 - form, inputs, select</h1>
+    <form action="/result" method="post">
+        <input type="text" value="100" name="pierwszaLiczba">
+        <input type="text" value="200" name="drugaLiczba">
+        <select name="list" id="list">
+            <option value="suma">suma</option>
+            <option value="różnica">różnica</option>
+            <option value="iloczyn">iloczyn</option>
+            <option value="iloraz">iloraz</option>
+            <option value="wszystko">wsyzstko</option>
+        </select>
+        <input type="submit" value="send">
+    </form>
+</body>
+
+</html>

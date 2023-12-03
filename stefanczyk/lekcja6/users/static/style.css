@@ -1,0 +1,54 @@
+* {
+  font-family: monospace;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: lightslategrey;
+}
+
+h1 {
+  padding: 10px;
+  background-color: rgb(46, 46, 46);
+  color: orangered;
+  font-weight: 50;
+  text-transform: uppercase;
+}
+
+form {
+  padding: 10px;
+}
+
+#username,
+#password {
+  background-color: rgb(46, 46, 46);
+  color: white;
+  border: 2px solid orangered;
+  border-radius: 10px;
+}
+
+table {
+  font-size: 1.5em;
+  padding: 10px;
+}
+
+#firstRow {
+  font-weight: 900;
+}
+
+#lp {
+  background-color: lightskyblue;
+  border-radius: 100%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+td {
+  padding: 10px;
+}
