@@ -1,0 +1,25 @@
+<h1 class=" m-3 ">cars list</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">_id</th>
+            <th scope="col">ubezpieczony</th>
+            <th scope="col">benzyna</th>
+            <th scope="col">uszkodzony</th>
+            <th scope="col">napęd 4x4</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each cars}}
+        <tr>
+            <th scope="row">{{_id}}</th>
+            <td>{{ubezpieczony}}</td>
+            <td>{{benzyna}}</td>
+            <td>{{uszkodzony}}</td>
+            <td>{{naped4x4}}</td>
+            <td><input class="btn btn-primary" type="button" value="INFO" onclick="confirm({{cars}})"></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

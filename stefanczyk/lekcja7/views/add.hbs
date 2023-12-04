@@ -1,0 +1,25 @@
+<h1 class="m-3">add car page</h1>
+<div class="alert alert-success" role="alert">
+    <p>new car with id = {{_id}} added to database</p>
+</div>
+<form action="/addCar" method="post">
+    <div class="form-check form-switch m-3">
+        <input class="form-check-input" type="checkbox" name="ubezpieczony" id="ubezpieczony">
+        <label class="form-check-label" for="ubezpieczony">ubezpieczony</label>
+    </div>
+    <div class="form-check form-switch m-3">
+        <input class="form-check-input" type="checkbox" name="benzyna" id="benzyna">
+        <label class="form-check-label" for="benzyna">benzyna</label>
+    </div>
+    <div class="form-check form-switch m-3">
+        <input class="form-check-input" type="checkbox" name="uszkodzony" id="uszkodzony">
+        <label class="form-check-label" for="uszkodzony">uszkodzony</label>
+    </div>
+    <div class="form-check form-switch m-3">
+        <input class="form-check-input" type="checkbox" name="naped4x4" id="naped4x4">
+        <label class="form-check-label" for="naped4x4">naped4x4</label>
+    </div>
+    <div class="col-12 m-3 mt-4">
+        <button type="submit" class="btn btn-primary">add</button>
+    </div>
+</form>
