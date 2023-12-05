@@ -1,0 +1,8 @@
+<h1>ćwiczenie 6 - dane z tablicy obiektów, checkboxes</h1>
+<form action="/handleForm" method="GET">
+    {{#each fields}}
+    <label for="checkbox">{{name}}</label>
+    <input type="checkbox" name="{{name}}" id="checkbox">
+    {{/each}}
+    <input type="submit" value="send">
+</form>
