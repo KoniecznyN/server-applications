@@ -1,1 +1,32 @@
-<h1>delete</h1>
+<h1 class=" m-3 ">delete cars</h1>
+<form action="/deleteCars" method="POST">
+    <input type="submit" class="btn btn-danger m-3 " value="DELETE ALL CARS">
+</form>
+<form method="GET">
+<input type="submit" class="btn btn-dark m-3 " value="DELETE SELECTED" onclick="return confirm('Czy chcesz usunąć?')" formaction="/deleteSelected">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">_id</th>
+                <th scope="col">ubezpieczony</th>
+                <th scope="col">benzyna</th>
+                <th scope="col">uszkodzony</th>
+                <th scope="col">napęd 4x4</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each cars}}
+            <tr>
+                <th scope="row">{{_id}}</th>
+                <td>{{ubezpieczony}}</td>
+                <td>{{benzyna}}</td>
+                <td>{{uszkodzony}}</td>
+                <td>{{naped4x4}}</td>
+                <td><button type="submit" class="btn btn-danger" onclick="return confirm('Czy chcesz usunąć?')" name="delete" value="{{_id}}" formaction="/deleteOne">DELETE</button></td>
+                <td><input type="checkbox" name="{{_id}}"></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</form>

@@ -40,6 +40,7 @@ app.post("/addCar", function (req, res) {
     benzyna: req.body.benzyna == "on" ? "yes" : "no",
     uszkodzony: req.body.uszkodzony == "on" ? "yes" : "no",
     naped4x4: req.body.naped4x4 == "on" ? "yes" : "no",
+    toDelete: "off",
   };
   coll.insert(doc, function (err, newDoc) {
     res.render("add.hbs", newDoc);
@@ -54,10 +55,43 @@ app.get("/carsList", function (req, res) {
   });
 });
 
+//delete cars
 app.get("/deleteCar", function (req, res) {
+  coll.find({}, function (err, docs) {
+    const context = { cars: docs };
+    res.render("delete.hbs", context);
+  });
+});
+
+app.post("/deleteCars", function (req, res) {
+  coll.remove({}, { multi: true }, function (err, newDoc) {});
   res.render("delete.hbs");
 });
 
+app.get("/deleteOne", function (req, res) {
+  if (true) {
+    coll.remove({ _id: req.query.delete }, function (err, numRemoved) {});
+  }
+  coll.find({}, function (err, docs) {
+    const context = { cars: docs };
+    res.render("delete.hbs", context);
+  });
+});
+
+app.get("/deleteSelected", function (req, res) {
+  const selected = Object.keys(req.query);
+  if (true) {
+    for (let key in selected) {
+      coll.remove({ _id: selected[key] }, function (err, numRemoved) {});
+    }
+  }
+  coll.find({}, function (err, docs) {
+    const context = { cars: docs };
+    res.render("delete.hbs", context);
+  });
+});
+
+//edit cars
 app.get("/editCars", function (req, res) {
   res.render("edit.hbs");
 });
