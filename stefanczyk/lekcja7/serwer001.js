@@ -41,6 +41,7 @@ app.post("/addCar", function (req, res) {
     uszkodzony: req.body.uszkodzony == "on" ? "yes" : "no",
     naped4x4: req.body.naped4x4 == "on" ? "yes" : "no",
     toDelete: "off",
+    toEdit: "",
   };
   coll.insert(doc, function (err, newDoc) {
     res.render("add.hbs", newDoc);
@@ -93,7 +94,39 @@ app.get("/deleteSelected", function (req, res) {
 
 //edit cars
 app.get("/editCars", function (req, res) {
-  res.render("edit.hbs");
+  coll.find({}, function (err, docs) {
+    const context = { cars: docs };
+    // console.log(context.cars);
+    console.log(req.query._id);
+    for (let i = 0; i < context.cars.length; i++) {
+      if (context.cars[i]._id == req.query._id) {
+        context.cars[i].toEdit = "yes";
+      }
+    }
+    res.render("edit.hbs", context);
+  });
+});
+
+app.get("/updateCars", function (req, res) {
+  const newDoc = {
+    ubezpieczony: req.query.ubezpieczony,
+    benzyna: req.query.benzyna,
+    uszkodzony: req.query.uszkodzony,
+    naped4x4: req.query.naped4x4,
+    toDelete: "off",
+    toEdit: "",
+    _id: req.query._id,
+  };
+  coll.update(
+    { _id: req.query._id },
+    { $set: newDoc },
+    {},
+    function (err, numUpdated) {}
+  );
+  coll.find({}, function (err, docs) {
+    const context = { cars: docs };
+    res.render("edit.hbs", context);
+  });
 });
 
 app.listen(PORT, function () {

@@ -1,1 +1,66 @@
-<h1>edit</h1>
+<h1 class=" m-3 ">edit cars</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">_id</th>
+            <th scope="col">ubezpieczony</th>
+            <th scope="col">benzyna</th>
+            <th scope="col">uszkodzony</th>
+            <th scope="col">napęd 4x4</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each cars}}
+        {{#if toEdit}}
+        <tr>
+            <form action="/updateCars" method="get">
+                <th scope="row">{{_id}}</th>
+                <td>
+                    <select name="ubezpieczony" class="form-select form-select-lg">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                        <option value="brak_danych">brak danych</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="benzyna" class="form-select form-select-lg" id="">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                        <option value="brak_danych">brak danych</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="uszkodzony" class="form-select form-select-lg" id="">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                        <option value="brak_danych">brak danych</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="naped4x4" class="form-select form-select-lg" id="">
+                        <option value="yes">yes</option>
+                        <option value="no">no</option>
+                        <option value="brak_danych">brak danych</option>
+                    </select>
+                </td>
+                    <td><button type="submit" name="_id" value="{{_id}}" onclick="return confirm('Czy chcesz zaktualizować dane?')" class="btn btn-danger">UPDATE</button></td>
+                    <td><button type="reset" class="btn btn-dark">CANCEL</button></td>
+            </form>
+        </tr>
+        {{else}}
+        <tr>
+            <th scope="row">{{_id}}</th>
+            <td>{{ubezpieczony}}</td>
+            <td>{{benzyna}}</td>
+            <td>{{uszkodzony}}</td>
+            <td>{{naped4x4}}</td>
+            <form action="/editCars" method="get">
+                <td><button type="submit" class="btn btn-dark" name="_id"
+                    value="{{_id}}" formaction="/editCars">EDIT</button></td>
+            </form>
+        </tr>
+        {{/if}}
+        {{/each}}
+    </tbody>
+</table>
