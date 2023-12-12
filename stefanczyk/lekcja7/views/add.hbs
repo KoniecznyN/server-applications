@@ -1,7 +1,9 @@
 <h1 class="m-3">add car page</h1>
-<div class="alert alert-success" role="alert">
-    <p>new car with id = {{_id}} added to database</p>
-</div>
+{{#if _id}}
+    <div class="alert alert-success" role="alert">
+        <p>new car with id = {{_id}} added to database</p>
+    </div>
+{{/if}}
 <form action="/addCar" method="post">
     <div class="form-check form-switch m-3">
         <input class="form-check-input" type="checkbox" name="ubezpieczony" id="ubezpieczony">
