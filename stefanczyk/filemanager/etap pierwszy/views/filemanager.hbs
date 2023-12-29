@@ -1,0 +1,38 @@
+<div id="main">
+    <div id="leftContainer">
+        <p>filemanager</p>
+        <p><a href="/deleteAll">usuń wszystkie rzeczy z tablicy</a></p>
+    </div>
+    <div id="rightContainer">
+        <table>
+            <thead>
+                <tr>
+                    <td>id</td>
+                    <td>obraz</td>
+                    <td>name</td>
+                    <td>size</td>
+                    <td>type</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each files}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td><img src="{{icon}}" alt="{{icon}}"></td>
+                    <td>{{name}}</td>
+                    <td>{{size}}</td>
+                    <td>{{type}}</td>
+                    <td><a href="/show?id={{id}}">SHOW</a></td>
+                    <td><a href="/info?id={{id}}">INFO</a></td>
+                    <td><a href="/download?id={{id}}">DOWNLOAD</a></td>
+                    <td><a href="/delete?id={{id}}">DELETE</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
