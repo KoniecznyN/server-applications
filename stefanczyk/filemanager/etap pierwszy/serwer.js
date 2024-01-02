@@ -47,20 +47,16 @@ app.post("/upload", function (req, res) {
         let ico = "";
         switch (files.image[i].type) {
           case "text/plain":
-            ico =
-              "https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/filetype-txt-512.png";
+            ico = path.join("icons", "document.jpg");
             break;
           case "image/png":
-            ico =
-              "https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/filetype-png-512.png";
+            ico = path.join("icons", "image.jpg");
             break;
           case "image/jpeg":
-            ico =
-              "https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/filetype-jpg-512.png";
+            ico = path.join("icons", "image.jpg");
             break;
           default:
-            ico =
-              "https://cdn1.iconfinder.com/data/icons/bootstrap-vol-2/16/file-earmark-x-512.png";
+            ico = path.join("icons", "none.jpg");
             break;
         }
         let date = new Date();
@@ -81,20 +77,16 @@ app.post("/upload", function (req, res) {
       let ico = "";
       switch (files.image.type) {
         case "text/plain":
-          ico =
-            "https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/filetype-txt-512.png";
+          ico = path.join("icons", "document.jpg");
           break;
         case "image/png":
-          ico =
-            "https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/filetype-png-512.png";
+          ico = path.join("icons", "image.jpg");
           break;
         case "image/jpeg":
-          ico =
-            "https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/filetype-jpg-512.png";
+          ico = path.join("icons", "image.jpg");
           break;
         default:
-          ico =
-            "https://cdn1.iconfinder.com/data/icons/bootstrap-vol-2/16/file-earmark-x-512.png";
+          ico = path.join("icons", "none.jpg");
           break;
       }
       let date = new Date();
