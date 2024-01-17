@@ -10,8 +10,8 @@ body {
 }
 
 #navbar {
-  background-color: darkred;
-  background-image: linear-gradient(to right, darkred, rgb(78, 0, 0));
+  background-color: black;
+  background-image: linear-gradient(to right, black, rgb(47, 47, 47));
 }
 
 #navbar > ul {
@@ -39,8 +39,9 @@ body {
 }
 
 #leftContainer {
-  width: 300px;
+  width: 190px;
   height: 100%;
+  padding: 10px;
   background-color: lightgray;
 }
 
@@ -55,7 +56,7 @@ body {
   margin: 10px;
   width: 150px;
   height: 50px;
-  background-color: darkred;
+  background-color: black;
   border-radius: 15px;
   display: flex;
   justify-content: center;
@@ -68,16 +69,27 @@ body {
   cursor: pointer;
 }
 
+#breakLane {
+  width: 100%;
+  margin-block: 10px;
+  border: 3px dotted black;
+}
+#uploadSubmitBtn,
+input[type="file"]::file-selector-button {
+  margin: 10px;
+  width: 100px;
+  height: 45px;
+  background-color: black;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
 #rightContainer {
   overflow-y: scroll;
   width: 100%;
-}
-
-#folders,
-#files {
-  display: flex;
-  justify-content: flex-start;
-  /* align-items: center; */
 }
 
 #directory {
@@ -85,8 +97,9 @@ body {
   margin: 10px;
   width: 170px;
   height: 120px;
-  border: 5px solid red;
+  border: 5px solid orange;
   border-radius: 10px;
+  display: inline-block;
   /* color: white; */
 }
 
@@ -95,8 +108,9 @@ body {
   margin: 10px;
   width: 175px;
   height: 120px;
-  border: 5px solid blue;
+  border: 5px solid lightskyblue;
   border-radius: 10px;
+  display: inline-block;
   /* color: white; */
 }
 
@@ -112,6 +126,7 @@ body {
   font-size: 1.2em;
   color: red;
   text-decoration: none;
+  padding: 10px;
 }
 
 #file > p > a {
@@ -120,9 +135,11 @@ body {
   text-decoration: none;
 }
 
-#file > p {
+#file > p,
+#directory > p {
   overflow: hidden;
-  text-overflow: clip;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 img {
@@ -137,7 +154,7 @@ img {
   left: calc(50% - 150px);
   width: 300px;
   height: 130px;
-  border: 4px solid darkred;
+  border: 4px solid black;
 }
 
 #newFile > div,
@@ -161,7 +178,7 @@ img {
 #newFolder > div > form > button {
   margin: 10px;
   padding: 5px;
-  background-color: darkred;
+  background-color: black;
   color: white;
   font-size: 1.3em;
 }

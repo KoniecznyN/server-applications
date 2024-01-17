@@ -7,10 +7,11 @@
         <div id="btn" onclick="newFile()">
             <p>nowy plik tekstowy</p>
         </div>
+        <div id="breakLane"></div>
         <div>
             <form enctype="multipart/form-data" action="/upload" method="POST">
                 <input type="file" multiple required name="image">
-                <button type="submit">OK</button>
+                <button id="uploadSubmitBtn" type="submit">OK</button>
             </form>
         </div>
     </div>
