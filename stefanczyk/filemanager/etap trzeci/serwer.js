@@ -24,7 +24,7 @@ app.use(
 let rootElements = [__dirname, "files"];
 
 function readDir(rootPath) {
-  let data = { directories: [], files: [], root: [] };
+  let data = { directories: [], files: [], root: [], changeName: "" };
   fs.readdir(rootPath, (err, files) => {
     if (err) throw err;
     files.forEach((file) => {
@@ -42,7 +42,6 @@ function readDir(rootPath) {
       });
     });
   });
-  console.log(data);
   return data;
 }
 
@@ -126,25 +125,22 @@ app.get("/filemanager", function (req, res) {
     rootElements.push(req.query.name);
     root.push({ name: req.query.name });
   }
+
   if (req.query.path != undefined) {
     let index = rootElements.indexOf(req.query.path);
-    console.log(index);
     let length = rootElements.length - index;
     rootElements.splice(index + 1, length);
     root.splice(index - 1, length);
   }
+
   let rootPath = createPath();
   let context = readDir(rootPath);
-  console.log(rootElements);
-  console.log(root);
   context.root = root;
-  res.render("filemanager.hbs", context);
-});
 
-app.get("/home", function (req, res) {
-  rootElements = [__dirname, "files"];
-  root = [];
-  res.redirect("/filemanager");
+  if (root.length > 0) {
+    context.changeName = "witam";
+  } else context.changeName = "";
+  res.render("filemanager.hbs", context);
 });
 
 //show
@@ -198,12 +194,33 @@ app.post("/upload", function (req, res) {
   });
 });
 
+//zmiana nazwy folderu
+app.get("/changeName", function (req, res) {
+  let oldPath = createPath();
+
+  let newName = req.query.name;
+  rootElements[rootElements.length - 1] = newName;
+  root[root.length - 1] = newName;
+
+  let newPath = createPath();
+
+  if (!fs.existsSync(newName)) {
+    fs.rename(oldPath, newPath, (err) => {
+      if (err) throw err;
+    });
+  } else {
+    res.redirect("/filemanager");
+  }
+
+  res.redirect("/filemanager");
+});
+
 //usuwanie folderow
 app.get("/deleteFolder", function (req, res) {
   let rootPath = createPath();
   let directoryPath = path.join(rootPath, req.query.name);
 
-  fs.rmdir(directoryPath, (err) => {
+  fs.rm(directoryPath, { recursive: true }, (err) => {
     if (err) throw err;
   });
 

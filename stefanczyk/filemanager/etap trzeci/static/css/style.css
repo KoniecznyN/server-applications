@@ -148,7 +148,8 @@ img {
 }
 
 #newFile,
-#newFolder {
+#newFolder,
+#changeName {
   position: absolute;
   top: calc(50% - 65px);
   left: calc(50% - 150px);
@@ -158,24 +159,28 @@ img {
 }
 
 #newFile > div,
-#newFolder > div {
+#newFolder > div,
+#changeName > div {
   display: flex;
   justify-content: center;
 }
 
 #newFile > div > form > p,
-#newFolder > div > form > p {
+#newFolder > div > form > p,
+#changeName > div > form > p {
   padding: 10px;
   font-size: 1.3em;
 }
 
 #newFile > div > form > input,
-#newFolder > div > form > input {
+#newFolder > div > form > input,
+#changeName > div > form > input {
   width: 90%;
 }
 
 #newFile > div > form > button,
-#newFolder > div > form > button {
+#newFolder > div > form > button,
+#changeName > div > form > button {
   margin: 10px;
   padding: 5px;
   background-color: black;

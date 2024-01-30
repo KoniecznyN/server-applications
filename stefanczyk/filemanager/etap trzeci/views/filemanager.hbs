@@ -7,6 +7,11 @@
         <div id="btn" onclick="newFile()">
             <p>nowy plik tekstowy</p>
         </div>
+        {{#if changeName}}
+        <div id="btn" onclick="changeName()">
+            <p>zmiana nazwy foleru</p>
+        </div>
+        {{/if}}
         <div id="breakLane"></div>
         <div>
             <form enctype="multipart/form-data" action="/upload" method="POST">
@@ -18,7 +23,7 @@
     <div id="rightContainer">
         <div id="path">
             <p>/</p>
-            <p><a href="/home">home</a></p>
+            <p><a href="/filemanager?path=files">home</a></p>
             {{#each root}}
             <p>&gt;</p>
             <p><a href="/filemanager?path={{name}}">{{name}}</a></p>
@@ -70,16 +75,28 @@
         </form>
     </div>
 </dialog>
+<dialog id="changeName">
+    <div>
+        <form action="/changeName" method="get">
+            <p>wprowadź nową nazwę folderu:</p>
+            <input type="text" name="name">
+            <br>
+            <button type="submit">OK</button>
+            <button onclick="closeDialog()">cancel</button>
+        </form>
+    </div>
+</dialog>
 <script>
     function newFile() {
         document.getElementById("newFile").showModal()
     }
-
     function newFolder() {
         document.getElementById("newFolder").showModal()
     }
-
+    function changeName() {
+        document.getElementById("changeName").showModal()
+    }
     function closeDialog() {
-        document.getElementById("newFolder").close()
+        document.getElementsByName("dialog").close()
     }
 </script>
