@@ -44,3 +44,22 @@ app.use(express.static("static"));
 app.listen(PORT, function () {
   console.log("start");
 });
+
+/*
+INSTALKI
+--node 
+npm install node
+
+--express
+npm install express
+
+--formidable
+npm install formidable@1.2.2
+
+--handlebars
+npm install express-handlebars@5.3.5
+
+--nedb
+npm install nedb
+
+*/
