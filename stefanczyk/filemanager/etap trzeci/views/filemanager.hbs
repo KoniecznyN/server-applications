@@ -1,0 +1,85 @@
+<div id="main">
+    <div id="leftContainer">
+        <div id="btn" onclick="newFolder()">
+            <p>nowy folder</p>
+            <dialog></dialog>
+        </div>
+        <div id="btn" onclick="newFile()">
+            <p>nowy plik tekstowy</p>
+        </div>
+        <div id="breakLane"></div>
+        <div>
+            <form enctype="multipart/form-data" action="/upload" method="POST">
+                <input type="file" multiple required name="image">
+                <button id="uploadSubmitBtn" type="submit">OK</button>
+            </form>
+        </div>
+    </div>
+    <div id="rightContainer">
+        <div id="path">
+            <p>/</p>
+            <p><a href="/home">home</a></p>
+            {{#each root}}
+            <p>&gt;</p>
+            <p><a href="/filemanager?path={{name}}">{{name}}</a></p>
+            {{/each}}
+        </div>
+        <div id="folders">
+            {{#each directories}}
+            <div id="directory">
+                <div>
+                    <img src="{{ico}}" alt="{{ico}}">
+                    <p><a href="/deleteFolder?name={{name}}">X</a></p>
+                </div>
+                <p><a href="/filemanager?name={{name}}">{{name}}</a></p>
+            </div>
+            {{/each}}
+        </div>
+        <div id="files">
+            {{#each files}}
+            <div id="file">
+                <div>
+                    <img src="{{ico}}" alt="{{ico}}">
+                    <p><a href="/deleteFile?name={{name}}">X</a></p>
+                </div>
+                <p><a href="/show?name={{name}}">{{name}}</a></p>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+<dialog id="newFolder">
+    <div>
+        <form action="/newFolder" method="get">
+            <p>nazwa nowego folderu:</p>
+            <input type="text" name="folder">
+            <br>
+            <button type="submit">OK</button>
+            <button onclick="closeDialog()">cancel</button>
+        </form>
+    </div>
+</dialog>
+<dialog id="newFile">
+    <div>
+        <form action="/newFile" method="get">
+            <p>nazwa nowego pliku:</p>
+            <input type="text" name="file">
+            <br>
+            <button type="submit">OK</button>
+            <button onclick="closeDialog()">cancel</button>
+        </form>
+    </div>
+</dialog>
+<script>
+    function newFile() {
+        document.getElementById("newFile").showModal()
+    }
+
+    function newFolder() {
+        document.getElementById("newFolder").showModal()
+    }
+
+    function closeDialog() {
+        document.getElementById("newFolder").close()
+    }
+</script>
