@@ -56,33 +56,33 @@
 <dialog id="newFolder">
     <div>
         <form action="/newFolder" method="get">
-            <p>nazwa nowego folderu:</p>
-            <input type="text" name="folder">
+            <p class="dialogText">nazwa nowego folderu:</p>
+            <input class="dialogInput" type="text" name="folder">
             <br>
-            <button type="submit">OK</button>
-            <button onclick="closeDialog()">cancel</button>
+            <button class="dialogButton" type="submit">OK</button>
+            <input class="dialogButton" type="button" onclick="closeDialog()" value="cancel" />
         </form>
     </div>
 </dialog>
 <dialog id="newFile">
     <div>
         <form action="/newFile" method="get">
-            <p>nazwa nowego pliku:</p>
-            <input type="text" name="file">
+            <p class="dialogText">nazwa nowego pliku:</p>
+            <input class="dialogInput" type="text" name="file">
             <br>
-            <button type="submit">OK</button>
-            <button onclick="closeDialog()">cancel</button>
+            <button class="dialogButton" type="submit">OK</button>
+            <input class="dialogButton" type="button" onclick="closeDialog()" value="cancel" />
         </form>
     </div>
 </dialog>
 <dialog id="changeName">
     <div>
         <form action="/changeName" method="get">
-            <p>wprowadź nową nazwę folderu:</p>
-            <input type="text" name="name">
+            <p class="dialogText">wprowadź nową nazwę folderu:</p>
+            <input class="dialogInput" type="text" name="name">
             <br>
-            <button type="submit">OK</button>
-            <button onclick="closeDialog()">cancel</button>
+            <button class="dialogButton" type="submit">OK</button>
+            <input class="dialogButton" type="button" onclick="closeDialog()" value="cancel" />
         </form>
     </div>
 </dialog>
@@ -97,6 +97,8 @@
         document.getElementById("changeName").showModal()
     }
     function closeDialog() {
-        document.getElementsByName("dialog").close()
+        document.getElementById("newFile").close()
+        document.getElementById("newFolder").close()
+        document.getElementById("changeName").close()
     }
 </script>

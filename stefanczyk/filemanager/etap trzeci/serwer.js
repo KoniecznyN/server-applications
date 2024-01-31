@@ -23,7 +23,8 @@ app.use(
 
 let rootElements = [__dirname, "files"];
 
-function readDir(rootPath) {
+function readDir() {
+  const rootPath = createPath(rootElements);
   let data = { directories: [], files: [], root: [], changeName: "" };
   fs.readdir(rootPath, (err, files) => {
     if (err) throw err;
@@ -105,9 +106,10 @@ function newFile(file) {
 
 function createPath() {
   let string = "";
+  console.log(rootElements);
   for (let i = 0; i < rootElements.length; i++) {
     string += rootElements[i];
-    if (rootElements[i] != rootElements[rootElements.length - 1]) {
+    if (i != rootElements.length - 1) {
       string += "\\";
     }
   }
@@ -121,6 +123,7 @@ app.get("/", function (req, res) {
 });
 
 app.get("/filemanager", function (req, res) {
+  console.log(rootElements);
   if (req.query.name != undefined) {
     rootElements.push(req.query.name);
     root.push({ name: req.query.name });
@@ -134,12 +137,15 @@ app.get("/filemanager", function (req, res) {
   }
 
   let rootPath = createPath();
-  let context = readDir(rootPath);
+  let context = readDir();
   context.root = root;
 
   if (root.length > 0) {
     context.changeName = "witam";
   } else context.changeName = "";
+
+  console.log(rootPath);
+
   res.render("filemanager.hbs", context);
 });
 
@@ -175,6 +181,7 @@ app.get("/newFile", function (req, res) {
 //upload
 app.post("/upload", function (req, res) {
   let rootPath = createPath();
+  console.log(rootPath);
   let form = formidable({});
   form.keepExtensions = true;
   form.multiples = true;
@@ -199,17 +206,32 @@ app.get("/changeName", function (req, res) {
   let oldPath = createPath();
 
   let newName = req.query.name;
+  let directory = { name: newName, counter: 1 };
+
   rootElements[rootElements.length - 1] = newName;
-  root[root.length - 1] = newName;
+  root[root.length - 1] = { name: newName };
 
   let newPath = createPath();
 
-  if (!fs.existsSync(newName)) {
+  if (!fs.existsSync(newPath)) {
+    console.log("nie istnieje");
     fs.rename(oldPath, newPath, (err) => {
       if (err) throw err;
     });
   } else {
-    res.redirect("/filemanager");
+    console.log("istnieje");
+    while (fs.existsSync(newPath)) {
+      newName = `${directory.name}(${directory.counter})`;
+      rootElements[rootElements.length - 1] = newName;
+      root[root.length - 1] = { name: newName };
+
+      newPath = createPath();
+
+      directory.counter++;
+    }
+    fs.rename(oldPath, newPath, (err) => {
+      if (err) throw err;
+    });
   }
 
   res.redirect("/filemanager");
@@ -220,9 +242,8 @@ app.get("/deleteFolder", function (req, res) {
   let rootPath = createPath();
   let directoryPath = path.join(rootPath, req.query.name);
 
-  fs.rm(directoryPath, { recursive: true }, (err) => {
-    if (err) throw err;
-  });
+  console.log(directoryPath);
+  fs.rmSync(directoryPath, { recursive: true, force: true });
 
   res.redirect("/filemanager");
 });

@@ -14,18 +14,18 @@ body {
   background-image: linear-gradient(to right, black, rgb(47, 47, 47));
 }
 
-#navbar > ul {
+#navbar>ul {
   display: flex;
   justify-content: left;
   list-style: none;
   position: relative;
 }
 
-#navbar > ul > li {
+#navbar>ul>li {
   margin: 10px 20px 10px 20px;
 }
 
-#navbar > ul > li > a {
+#navbar>ul>li>a {
   text-decoration: none;
   color: white;
   font-size: 1.5em;
@@ -45,7 +45,7 @@ body {
   background-color: lightgray;
 }
 
-#leftContainer > p {
+#leftContainer>p {
   color: gray;
   text-align: center;
   font-size: 1.3em;
@@ -63,7 +63,7 @@ body {
   align-items: center;
 }
 
-#btn > p {
+#btn>p {
   color: white;
   text-decoration: none;
   cursor: pointer;
@@ -74,6 +74,7 @@ body {
   margin-block: 10px;
   border: 3px dotted black;
 }
+
 #uploadSubmitBtn,
 input[type="file"]::file-selector-button {
   margin: 10px;
@@ -114,29 +115,29 @@ input[type="file"]::file-selector-button {
   /* color: white; */
 }
 
-#directory > div,
-#file > div {
+#directory>div,
+#file>div {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
-#directory > div > p > a,
-#file > div > p > a {
+#directory>div>p>a,
+#file>div>p>a {
   font-size: 1.2em;
   color: red;
   text-decoration: none;
   padding: 10px;
 }
 
-#file > p > a {
+#file>p>a {
   font-size: 1.2em;
   color: black;
   text-decoration: none;
 }
 
-#file > p,
-#directory > p {
+#file>p,
+#directory>p {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -147,45 +148,34 @@ img {
   height: auto;
 }
 
-#newFile,
-#newFolder,
-#changeName {
+dialog {
   position: absolute;
-  top: calc(50% - 65px);
-  left: calc(50% - 150px);
-  width: 300px;
-  height: 130px;
+  top: calc(50%);
+  left: calc(50%);
+  transform: translate(-50%, -50%);
+  width: max-content;
+  height: max-content;
   border: 4px solid black;
-}
-
-#newFile > div,
-#newFolder > div,
-#changeName > div {
-  display: flex;
-  justify-content: center;
-}
-
-#newFile > div > form > p,
-#newFolder > div > form > p,
-#changeName > div > form > p {
   padding: 10px;
+}
+
+.dialogText {
+  padding: 10px 0px 10px 0px;
   font-size: 1.3em;
 }
 
-#newFile > div > form > input,
-#newFolder > div > form > input,
-#changeName > div > form > input {
-  width: 90%;
+.dialogInput {
+  width: max-content;
 }
 
-#newFile > div > form > button,
-#newFolder > div > form > button,
-#changeName > div > form > button {
+.dialogButton {
+  display: inline-block;
   margin: 10px;
   padding: 5px;
   background-color: black;
   color: white;
   font-size: 1.3em;
+  display: inline block;
 }
 
 #path {
@@ -193,8 +183,8 @@ img {
   padding: 2.5px;
 }
 
-#path > p,
-#path > p > a {
+#path>p,
+#path>p>a {
   display: inline-block;
   color: white;
 }
