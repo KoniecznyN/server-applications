@@ -1,0 +1,142 @@
+<div id="main">
+    <div id="leftContainer">
+        <div id="editorButton">
+            <div id="minusButton" onclick="fontMinus()"><p>-</p></div>
+            <div id="styleButton" onclick="changeStyle()"><p>style</p></div>
+            <div id="plusButton" onclick="fontPlus()"><p>+</p></div>
+        </div>
+        <div id="btn" onclick="">
+            <p>zapisz ustawienia</p>
+        </div>
+        <div id="btn" onclick="changeName()">
+            <p>zmiana nazwy pliku</p>
+        </div>
+    </div>
+    <div id="rightContainer">
+        <div id="path">
+            <p>{{name}}</p>
+        </div>
+        <form action="/save" method="get">
+            <div id="editor">
+                <div id="numbers"></div>
+                <div class="line" id="line"></div>
+                <textarea id="text" rows="0" name="content">{{content}}</textarea>
+                <input type="hidden" name="name" value="{{name}}">
+            </div>
+            <button id="btn" type="submit">zapisz plik</button>
+        </form>
+    </div>
+</div>
+<dialog id="changeName">
+    <div>
+        <form action="/changeFileName" method="get">
+            <p class="dialogText">wprowadź nową nazwę pliku:</p>
+            <input class="dialogInput" type="text" name="name">
+            <input type="hidden" name="oldName" value="{{name}}">
+            <br>
+            <button class="dialogButton" type="submit">OK</button>
+            <input class="dialogButton" type="button" onclick="closeDialog()" value="cancel" />
+        </form>
+    </div>
+</dialog>
+<script>
+    function newFile() {
+        document.getElementById("newFile").showModal()
+    }
+    function newFolder() {
+        document.getElementById("newFolder").showModal()
+    }
+    function changeName() {
+        document.getElementById("changeName").showModal()
+    }
+    function closeDialog() {
+        document.getElementById("newFile").close()
+        document.getElementById("newFolder").close()
+        document.getElementById("changeName").close()
+    }
+</script>
+<script>
+    const text = document.getElementById("text")
+    const numbers = document.getElementById("numbers")
+
+    function numbering() {
+        let template = `1\n`
+        let rows = 1
+
+        let array = text.value.split("\n")
+        for (let i = 0; i < array.length - 1; i++) {
+            template += `${i+2}\n`
+            rows++
+        }
+        text.rows = rows
+        numbers.innerText = template
+    }
+
+    function syncScroll(){
+        numbers.scrollTop = text.scrollTop
+    }
+
+    
+    syncScroll()
+    text.onscroll = syncScroll
+
+    numbering()
+    text.onkeyup = numbering
+    text.onkeydown = numbering
+
+    let font = 15
+
+    function fontMinus(){
+        if(font >= 10){
+            font -= 3
+            document.getElementById("editor").style.fontSize = font + "px"
+            text.style.fontSize = font + "px" 
+        }
+    }
+
+    function fontPlus(){
+        if (font <= 30) {
+            font += 3
+            document.getElementById("editor").style.fontSize = font + "px"
+            text.style.fontSize = font + "px"
+        }
+    }
+
+    let style = 0
+    function changeStyle(){
+        style++
+        if(style == 4){
+            style = 1
+        }
+        if(style == 1){
+            text.style.backgroundColor = "black"
+            text.style.color = "white"
+
+            document.getElementById("numbers").style.backgroundColor = "black"
+            numbers.childNodes.forEach((element) => {
+                element.style.backgroundColor = "black"
+                element.style.color = "white"
+            });
+        }
+        if(style == 2){
+            text.style.backgroundColor = "lightgrey"
+            text.style.color = "blue"
+
+            document.getElementById("numbers").style.backgroundColor = "lightgrey"
+            numbers.childNodes.forEach((element) => {
+                element.style.backgroundColor = "lightgrey"
+                element.style.color = "blue"
+            });
+        }
+        if(style == 3){
+            text.style.backgroundColor = "white"
+            text.style.color = "black"
+
+            document.getElementById("numbers").style.backgroundColor = "white"
+            numbers.childNodes.forEach((element) => {
+                element.style.backgroundColor = "white"
+                element.style.color = "black"
+            });
+        }
+    }  
+</script>

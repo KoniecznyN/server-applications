@@ -1,0 +1,104 @@
+<div id="main">
+    <div id="leftContainer">
+        <div id="btn" onclick="newFolder()">
+            <p>nowy folder</p>
+            <dialog></dialog>
+        </div>
+        <div id="btn" onclick="newFile()">
+            <p>nowy plik tekstowy</p>
+        </div>
+        {{#if changeName}}
+        <div id="btn" onclick="changeName()">
+            <p>zmiana nazwy foleru</p>
+        </div>
+        {{/if}}
+        <div id="breakLane"></div>
+        <div>
+            <form enctype="multipart/form-data" action="/upload" method="POST">
+                <input type="file" multiple required name="image">
+                <button id="uploadSubmitBtn" type="submit">OK</button>
+            </form>
+        </div>
+    </div>
+    <div id="rightContainer">
+        <div id="path">
+            <p>/</p>
+            <p><a href="/filemanager?path=files">home</a></p>
+            {{#each root}}
+            <p>&gt;</p>
+            <p><a href="/filemanager?path={{name}}">{{name}}</a></p>
+            {{/each}}
+        </div>
+        <div id="folders">
+            {{#each directories}}
+            <div id="directory">
+                <div>
+                    <img src="{{ico}}" alt="{{ico}}">
+                    <p><a href="/deleteFolder?name={{name}}">X</a></p>
+                </div>
+                <p><a href="/filemanager?name={{name}}">{{name}}</a></p>
+            </div>
+            {{/each}}
+        </div>
+        <div id="files">
+            {{#each files}}
+            <div id="file">
+                <div>
+                    <img src="{{ico}}" alt="{{ico}}">
+                    <p><a href="/deleteFile?name={{name}}">X</a></p>
+                </div>
+                <p><a href="/show?name={{name}}">{{name}}</a></p>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+<dialog id="newFolder">
+    <div>
+        <form action="/newFolder" method="get">
+            <p class="dialogText">nazwa nowego folderu:</p>
+            <input class="dialogInput" type="text" name="folder">
+            <br>
+            <button class="dialogButton" type="submit">OK</button>
+            <input class="dialogButton" type="button" onclick="closeDialog()" value="cancel" />
+        </form>
+    </div>
+</dialog>
+<dialog id="newFile">
+    <div>
+        <form action="/newFile" method="get">
+            <p class="dialogText">nazwa nowego pliku:</p>
+            <input class="dialogInput" type="text" name="file">
+            <br>
+            <button class="dialogButton" type="submit">OK</button>
+            <input class="dialogButton" type="button" onclick="closeDialog()" value="cancel" />
+        </form>
+    </div>
+</dialog>
+<dialog id="changeName">
+    <div>
+        <form action="/changeName" method="get">
+            <p class="dialogText">wprowadź nową nazwę folderu:</p>
+            <input class="dialogInput" type="text" name="name">
+            <br>
+            <button class="dialogButton" type="submit">OK</button>
+            <input class="dialogButton" type="button" onclick="closeDialog()" value="cancel" />
+        </form>
+    </div>
+</dialog>
+<script>
+    function newFile() {
+        document.getElementById("newFile").showModal()
+    }
+    function newFolder() {
+        document.getElementById("newFolder").showModal()
+    }
+    function changeName() {
+        document.getElementById("changeName").showModal()
+    }
+    function closeDialog() {
+        document.getElementById("newFile").close()
+        document.getElementById("newFolder").close()
+        document.getElementById("changeName").close()
+    }
+</script>
