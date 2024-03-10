@@ -5,7 +5,7 @@
             <div id="styleButton" onclick="changeStyle()"><p>style</p></div>
             <div id="plusButton" onclick="fontPlus()"><p>+</p></div>
         </div>
-        <div id="btn" onclick="">
+        <div id="btn" onclick="saveConfig()">
             <p>zapisz ustawienia</p>
         </div>
         <div id="btn" onclick="changeName()">
@@ -20,10 +20,10 @@
             <div id="editor">
                 <div id="numbers"></div>
                 <div class="line" id="line"></div>
-                <textarea id="text" rows="0" name="content">{{content}}</textarea>
+                <textarea id="text" rows="0" name="content" wrap="off">{{content}}</textarea>
                 <input type="hidden" name="name" value="{{name}}">
             </div>
-            <button id="btn" type="submit">zapisz plik</button>
+            <button id="btn" type="submit" onclick="saveAlert()">zapisz plik</button>
         </form>
     </div>
 </div>
@@ -40,22 +40,17 @@
     </div>
 </dialog>
 <script>
-    function newFile() {
-        document.getElementById("newFile").showModal()
-    }
-    function newFolder() {
-        document.getElementById("newFolder").showModal()
+    function saveAlert(){
+        alert("zapisano plik")
     }
     function changeName() {
         document.getElementById("changeName").showModal()
     }
     function closeDialog() {
-        document.getElementById("newFile").close()
-        document.getElementById("newFolder").close()
         document.getElementById("changeName").close()
     }
 </script>
-<script>
+<script defer>
     const text = document.getElementById("text")
     const numbers = document.getElementById("numbers")
 
@@ -84,59 +79,110 @@
     text.onkeyup = numbering
     text.onkeydown = numbering
 
-    let font = 15
+
+    var font;
 
     function fontMinus(){
-        if(font >= 10){
-            font -= 3
+        if(font > 10){
+            font -= 5
+         console.log(font)
             document.getElementById("editor").style.fontSize = font + "px"
             text.style.fontSize = font + "px" 
+            numbers.style.fontSize = font + "px" 
         }
     }
 
     function fontPlus(){
-        if (font <= 30) {
-            font += 3
+        if (font < 30) {
+            font += 5
+         console.log(font)
             document.getElementById("editor").style.fontSize = font + "px"
             text.style.fontSize = font + "px"
+            numbers.style.fontSize = font + "px" 
         }
     }
 
-    let style = 0
+    var selectedStyle
+    var backgroundColor
+    var fontColor
     function changeStyle(){
-        style++
-        if(style == 4){
-            style = 1
+        selectedStyle++
+        const style = {
+            first: {
+                backgroundColor: "white",
+                fontColor: "black"
+            },
+            second: {
+                backgroundColor: "black",
+                fontColor: "white"
+            },
+            third: {
+                backgroundColor: "lightgrey",
+                fontColor: "blue"
+            }
         }
-        if(style == 1){
-            text.style.backgroundColor = "black"
-            text.style.color = "white"
 
-            document.getElementById("numbers").style.backgroundColor = "black"
-            numbers.childNodes.forEach((element) => {
-                element.style.backgroundColor = "black"
-                element.style.color = "white"
-            });
+        selectedStyle = (selectedStyle === 4) ? 1 : selectedStyle;
+        if(selectedStyle == 1){
+            setStyle(style.first)
         }
-        if(style == 2){
-            text.style.backgroundColor = "lightgrey"
-            text.style.color = "blue"
+        if(selectedStyle == 2){
+            setStyle(style.second)
+        }
+        if(selectedStyle == 3){
+            setStyle(style.third)
+        }
+    }
 
-            document.getElementById("numbers").style.backgroundColor = "lightgrey"
-            numbers.childNodes.forEach((element) => {
-                element.style.backgroundColor = "lightgrey"
-                element.style.color = "blue"
-            });
-        }
-        if(style == 3){
-            text.style.backgroundColor = "white"
-            text.style.color = "black"
+    function setStyle(obj) {
+            text.style.backgroundColor = obj.backgroundColor;
+            text.style.color = obj.fontColor;
+            numbers.style.backgroundColor = obj.backgroundColor;
+            numbers.style.color = obj.fontColor;
 
-            document.getElementById("numbers").style.backgroundColor = "white"
-            numbers.childNodes.forEach((element) => {
-                element.style.backgroundColor = "white"
-                element.style.color = "black"
-            });
-        }
-    }  
+            backgroundColor = obj.backgroundColor
+            fontColor = obj.fontColor
+    }
+    
+    function saveConfig() {
+            const obj = JSON.stringify({
+                backgroundColor: backgroundColor,
+                fontColor: fontColor,
+                selectedStyle: selectedStyle,
+                fontSize: font
+            })
+
+            fetch("http://localhost:3000/saveConfig", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: obj
+            })
+    }   
+
+    function readConfig(){
+        fetch("http://localhost:3000/readConfig", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            text.style.backgroundColor = data.backgroundColor;
+            text.style.color = data.fontColor;
+            text.style.fontSize = `${data.fontSize}px`;
+
+            numbers.style.backgroundColor = data.backgroundColor;
+            numbers.style.color = data.fontColor;
+            numbers.style.fontSize = `${data.fontSize}px`;
+            
+            selectedStyle = data.selectedStyle
+            backgroundColor = data.backgroundColor
+            fontColor = data.fontColor
+            font = data.fontSize
+        })
+    }
+    readConfig()
 </script>

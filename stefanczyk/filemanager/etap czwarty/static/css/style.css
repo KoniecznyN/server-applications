@@ -207,18 +207,10 @@ dialog {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-#editor > #text,
-#editor > #numbers,
-#editor > #numbers > div {
-  background-color: black;
-  color: white;
-}
-
 #editor > #numbers {
   height: 100%;
   width: auto;
   padding-inline: 2.5px;
-  color: white;
   overflow-y: scroll;
   overflow: hidden;
 }

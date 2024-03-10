@@ -20,6 +20,7 @@ app.use(
     extended: true,
   })
 );
+app.use(express.json());
 
 let rootElements = [__dirname, "files"];
 
@@ -233,6 +234,9 @@ app.get("/newFile", function (req, res) {
   fileName = path.join(rootPath, fileName);
 
   let fileArray = fileName.split(".");
+  if (fileArray.length == 1) {
+    fileArray.push("txt");
+  }
 
   let file = { name: fileArray[0], counter: 0, extension: fileArray[1] };
 
@@ -301,12 +305,15 @@ app.get("/changeFileName", function (req, res) {
   rootElements[rootElements.length] = req.query.oldName;
   let oldPath = createPath();
 
-  let array = req.query.name.split(".");
-  let file = { name: array[0], counter: 1, extension: array[1] };
+  let fileArray = req.query.name.split(".");
+  if (fileArray.length == 1) {
+    fileArray.push("txt");
+  }
+
+  let file = { name: fileArray[0], counter: 1, extension: fileArray[1] };
   let newName = file.name + "." + file.extension;
 
   rootElements[rootElements.length - 1] = newName;
-  root[root.length - 1] = { name: newName };
 
   let newPath = createPath();
 
@@ -318,7 +325,6 @@ app.get("/changeFileName", function (req, res) {
     while (fs.existsSync(newPath)) {
       newName = `${file.name}(${file.counter}).${file.extension}`;
       rootElements[rootElements.length - 1] = newName;
-      root[root.length - 1] = { name: newName };
 
       newPath = createPath();
 
@@ -329,8 +335,9 @@ app.get("/changeFileName", function (req, res) {
     });
   }
   rootElements.pop();
-  root.pop();
-  res.redirect("/filemanager");
+  fs.readFile(newPath, function (err, data) {
+    res.redirect(`/show?name=${newName}`);
+  });
 });
 
 //usuwanie folderow
@@ -357,15 +364,32 @@ app.get("/deleteFile", function (req, res) {
 
 //zapis pliku
 app.get("/save", function (req, res) {
-  console.log(req.query);
   rootElements[rootElements.length] = req.query.name;
   let filePath = createPath();
   let fileContent = req.query.content;
   fs.writeFile(filePath, fileContent, (err) => {
     if (err) throw err;
-    console.log("plik zapisany");
     rootElements.pop();
-    res.redirect("/filemanager");
+  });
+  fs.readFile(filePath, function (err, data) {
+    res.redirect(`/show?name=${req.query.name}`);
+  });
+});
+
+//zapis configu
+app.post("/saveConfig", function (req, res) {
+  let filePath = path.join(__dirname, "editorConfig.json");
+  const data = JSON.stringify(req.body);
+  fs.writeFile(filePath, data, (err) => {
+    if (err) throw err;
+  });
+});
+
+//odczyt configu
+app.post("/readConfig", function (req, res) {
+  let filePath = path.join(__dirname, "editorConfig.json");
+  fs.readFile(filePath, function (err, data) {
+    res.send(data);
   });
 });
 
