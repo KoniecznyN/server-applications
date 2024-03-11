@@ -51,9 +51,12 @@ function uploadFile(file, oldPath) {
   let rootPath = createPath(rootElements);
   let filePath;
   if (file.counter == 0) {
-    filePath = path.join(rootPath, file.name);
+    filePath = path.join(rootPath, `${file.name}.${file.extension}`);
   } else {
-    filePath = path.join(rootPath, `${file.name}(${file.counter})`);
+    filePath = path.join(
+      rootPath,
+      `${file.name}(${file.counter}).${file.extension}`
+    );
   }
 
   if (!fs.existsSync(filePath)) {
@@ -272,11 +275,13 @@ app.post("/upload", function (req, res) {
     const isArray = Array.isArray(files.image);
     if (isArray) {
       files.image.forEach((element) => {
-        let file = { name: element.name, counter: 0 };
+        let name = element.name.split(".");
+        let file = { name: name[0], extension: name[1], counter: 0 };
         uploadFile(file, element.path);
       });
     } else {
-      let file = { name: files.image.name, counter: 0 };
+      let name = files.image.name.split(".");
+      let file = { name: name[0], extension: name[1], counter: 0 };
       uploadFile(file, files.image.path);
     }
     res.redirect("/filemanager");
@@ -412,12 +417,10 @@ app.post("/readConfig", function (req, res) {
 
 //zapis obrazka
 app.post("/saveImage", function (req, res) {
-  let string = decodeURIComponent(req.body.path);
+  let string = req.body.path;
   console.log(string);
-  let fileArray = decodeURI(req.body.path).split("/");
-  let fileName = fileArray[fileArray.length - 1];
   let filePath = createPath(rootElements);
-  filePath = path.join(filePath, fileName);
+  filePath = path.join(filePath, string);
 
   let dataUrl = req.body.dataUrl.split(",");
   dataUrl = dataUrl[1];
