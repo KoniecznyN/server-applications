@@ -1,0 +1,130 @@
+<div id="main">
+    <div id="leftContainer">
+        <div id="btn" onclick="showPanel()">
+            <p>filtry</p>
+        </div>
+        <div id="panel" class="panel">
+            {{#each effects}}
+            <div>
+                <img src="{{imagePath}}" alt="{{imagePath}}" style="filter: {{name}}(100%);" onclick="setFilter('{{name}}')">
+                <p>{{name}}</p>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    <div id="rightContainer">
+        <div id="path">
+            <p>{{name}}</p>
+        </div>
+        <div id="content">
+            <div id="imageDiv">
+                {{!-- <img id="mainImage" src="{{imagePath}}" alt="{{imagePath}}"> --}}
+                <div id="mainImage" style="background-image: url('{{imagePath}}');"></div>
+            </div>
+            <div id="buttonsDiv">
+                <div id="btn" onclick="changeName()">
+                    <p>zmiana nazwy pliku</p>
+                </div>
+                <div id="btn" onclick="saveImage()">
+                    <p>zapisz plik</p>
+                </div>
+                <div id="btn" onclick="">
+                    <p>podglad</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<dialog id="changeName">
+    <div>
+        <form action="/changeFileName" method="get">
+            <p class="dialogText">wprowadź nową nazwę pliku:</p>
+            <input class="dialogInput" type="text" name="name">
+            <input type="hidden" name="oldName" value="{{name}}">
+            <br>
+            <button class="dialogButton" type="submit">OK</button>
+            <input class="dialogButton" type="button" onclick="closeDialog()" value="cancel" />
+        </form>
+    </div>
+</dialog>
+<script>
+    function saveAlert() {
+        alert("zapisano plik")
+    }
+    function changeName() {
+        document.getElementById("changeName").showModal()
+    }
+    function closeDialog() {
+        document.getElementById("changeName").close()
+    }
+</script>
+<script>
+        ifClicked = false
+        function showPanel(){
+            ifClicked = !ifClicked
+            if (ifClicked){
+            document.getElementById("panel").style.height = "85%"
+            } else {
+            document.getElementById("panel").style.height = "0"
+            }
+        }
+
+        function changeResolution(width, height){
+            if(width >= height){
+                const scale = 600 / width 
+                const newWidth = 600
+                const newHeight = height * scale
+                return {height: newHeight, width: newWidth}
+            } else {
+                const scale = 600 / height
+                const newHeight = 600
+                const newWidth = width * scale
+                return { height: newHeight, width: newWidth }
+            }
+        }
+
+        var imageFilter = "none"
+        function setFilter(filter){
+            imageFilter = filter
+            if (filter == "none"){
+                document.getElementById("mainImage").style.filter = "none"
+            } else {
+                document.getElementById("mainImage").style.filter = `${filter}(100%)`
+            }
+        }
+</script>
+<script>
+    function saveImage(){
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d')
+        const mainImage = document.getElementById("mainImage")
+        let image = new Image()
+        console.log(image.src)
+        image.src = mainImage.style.backgroundImage.slice(4, -1).replace(/"/g, "")
+        console.log(image.src)
+
+        const imageResolution = changeResolution(image.width, image.height)
+
+        image.onload = function () {
+            canvas.width = imageResolution.width
+            canvas.height = imageResolution.height
+            context.filter = `${imageFilter}(100%)`;
+            context.drawImage(image, 0, 0, canvas.width, canvas.height); 
+
+            let dataUrl = canvas.toDataURL("image/jpeg")
+            const body = JSON.stringify({
+                dataUrl: dataUrl,
+                path: encodeURIComponent(image.src)
+            })
+            const headers = { "Content-Type": "application/json" }
+
+            fetch("/saveImage", { method: "post", body, headers })
+                .then(response => response.json())
+                .then(
+                    data => {
+                        console.log("plik zapisany")
+                    }
+                )
+        }
+    }
+</script>
