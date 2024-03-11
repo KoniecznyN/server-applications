@@ -216,6 +216,7 @@ app.get("/show", function (req, res) {
       fileArray.length
     );
     imagePath = createPath(fileArray);
+    imagePath = encodeURIComponent(imagePath);
 
     const context = {
       name: req.query.name,
