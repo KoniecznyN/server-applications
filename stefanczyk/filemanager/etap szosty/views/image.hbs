@@ -6,7 +6,8 @@
         <div id="panel" class="panel">
             {{#each effects}}
             <div>
-                <img src="{{imagePath}}" alt="{{imagePath}}" style="filter: {{name}}(100%);" onclick="setFilter('{{name}}')">
+                <img src="{{imagePath}}" alt="{{imagePath}}" style="filter: {{name}}(100%);"
+                    onclick="setFilter('{{name}}')">
                 <p>{{name}}</p>
             </div>
             {{/each}}
@@ -59,42 +60,42 @@
     }
 </script>
 <script>
-        ifClicked = false
-        function showPanel(){
-            ifClicked = !ifClicked
-            if (ifClicked){
+    ifClicked = false
+    function showPanel() {
+        ifClicked = !ifClicked
+        if (ifClicked) {
             document.getElementById("panel").style.height = "85%"
-            } else {
+        } else {
             document.getElementById("panel").style.height = "0"
-            }
         }
+    }
 
-        function changeResolution(width, height){
-            if(width >= height){
-                const scale = 600 / width 
-                const newWidth = 600
-                const newHeight = height * scale
-                return {height: newHeight, width: newWidth}
-            } else {
-                const scale = 600 / height
-                const newHeight = 600
-                const newWidth = width * scale
-                return { height: newHeight, width: newWidth }
-            }
+    function changeResolution(width, height) {
+        if (width >= height) {
+            const scale = 600 / width
+            const newWidth = 600
+            const newHeight = height * scale
+            return { height: newHeight, width: newWidth }
+        } else {
+            const scale = 600 / height
+            const newHeight = 600
+            const newWidth = width * scale
+            return { height: newHeight, width: newWidth }
         }
+    }
 
-        var imageFilter = "none"
-        function setFilter(filter){
-            imageFilter = filter
-            if (filter == "none"){
-                document.getElementById("mainImage").style.filter = "none"
-            } else {
-                document.getElementById("mainImage").style.filter = `${filter}(100%)`
-            }
+    var imageFilter = "none"
+    function setFilter(filter) {
+        imageFilter = filter
+        if (filter == "none") {
+            document.getElementById("mainImage").style.filter = "none"
+        } else {
+            document.getElementById("mainImage").style.filter = `${filter}(100%)`
         }
+    }
 </script>
 <script>
-    function saveImage(path){
+    function saveImage(path) {
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
         const mainImage = document.getElementById("mainImage")
@@ -105,16 +106,20 @@
 
         const imageResolution = changeResolution(image.width, image.height)
 
+        let imagePath = decodeURIComponent(path)
+        let array = imagePath.split("\\")
+        imagePath = array[array.length - 1]
+
         image.onload = function () {
             canvas.width = imageResolution.width
             canvas.height = imageResolution.height
             context.filter = `${imageFilter}(100%)`;
-            context.drawImage(image, 0, 0, canvas.width, canvas.height); 
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
 
             let dataUrl = canvas.toDataURL("image/jpeg")
             const body = JSON.stringify({
                 dataUrl: dataUrl,
-                path: path
+                path: imagePath
             })
             const headers = { "Content-Type": "application/json" }
 

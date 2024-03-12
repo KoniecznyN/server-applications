@@ -105,6 +105,10 @@
 
         const imageResolution = changeResolution(image.width, image.height)
 
+        let imagePath = decodeURIComponent(path)
+        let array = imagePath.split("\\")
+        imagePath = array[array.length-1]
+
         image.onload = function () {
             canvas.width = imageResolution.width
             canvas.height = imageResolution.height
@@ -114,7 +118,7 @@
             let dataUrl = canvas.toDataURL("image/jpeg")
             const body = JSON.stringify({
                 dataUrl: dataUrl,
-                path: path
+                path: imagePath
             })
             const headers = { "Content-Type": "application/json" }
 

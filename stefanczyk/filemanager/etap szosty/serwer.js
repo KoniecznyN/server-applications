@@ -22,6 +22,10 @@ app.use(
 );
 app.use(express.json());
 
+//nocache
+const nocache = require("nocache");
+app.use(nocache());
+
 //cookies
 const cookieparser = require("cookie-parser");
 app.use(cookieparser());
@@ -179,6 +183,16 @@ function createPath(arr) {
 
 let root = [];
 
+function isLogged(cookie) {
+  let isLogged = false;
+  users.forEach((element) => {
+    if (element.username == cookie) {
+      isLogged = true;
+    }
+  });
+  return isLogged;
+}
+
 app.get("/login", function (req, res) {
   console.log(users);
   res.render("login.hbs");
@@ -198,6 +212,7 @@ app.post("/login", function (req, res) {
   console.log(canLogin);
 
   if (canLogin) {
+    res.cookie("login", username, { httpOnly: true, maxAge: 60 * 1000 * 60 }); // testowe 30 sekund
     res.redirect("/filemanager");
   } else {
     res.render("error.hbs", { error: "zle dane logowania" });
@@ -229,67 +244,81 @@ app.post("/register", function (req, res) {
   }
 });
 
+app.get("/logout", function (req, res) {
+  res.clearCookie("login");
+  res.redirect("/login");
+});
+
 app.get("/", function (req, res) {
   res.redirect("/login");
 });
 
 app.get("/filemanager", function (req, res) {
-  if (req.query.name != undefined) {
-    rootElements.push(req.query.name);
-    root.push({ name: req.query.name });
+  if (isLogged(req.cookies.login)) {
+    if (req.query.name != undefined) {
+      rootElements.push(req.query.name);
+      root.push({ name: req.query.name });
+    }
+
+    if (req.query.path != undefined) {
+      let index = rootElements.indexOf(req.query.path);
+      let length = rootElements.length - index;
+      rootElements.splice(index + 1, length);
+      root.splice(index - 1, length);
+    }
+
+    let rootPath = createPath(rootElements);
+    let context = readDir();
+    context.root = root;
+
+    if (root.length > 0) {
+      context.changeName = "witam";
+    } else context.changeName = "";
+
+    res.render("filemanager.hbs", context);
+  } else {
+    res.render("error.hbs", { error: "nie jestes zalogowany" });
   }
-
-  if (req.query.path != undefined) {
-    let index = rootElements.indexOf(req.query.path);
-    let length = rootElements.length - index;
-    rootElements.splice(index + 1, length);
-    root.splice(index - 1, length);
-  }
-
-  let rootPath = createPath(rootElements);
-  let context = readDir();
-  context.root = root;
-
-  if (root.length > 0) {
-    context.changeName = "witam";
-  } else context.changeName = "";
-
-  res.render("filemanager.hbs", context);
 });
 
 //show
 app.get("/show", function (req, res) {
-  let fileName = req.query.name;
-  fileName = fileName.split(".");
+  if (isLogged(req.cookies.login)) {
+    let fileName = req.query.name;
+    fileName = fileName.split(".");
 
-  let rootPath = createPath(rootElements);
-  let filePath = path.join(rootPath, req.query.name);
+    let rootPath = createPath(rootElements);
+    let filePath = path.join(rootPath, req.query.name);
 
-  if (fileName[1] == "jpg" || fileName[1] == "png") {
-    fileArray = filePath.split("\\");
-    fileArray = fileArray.splice(
-      fileArray.indexOf("files") + 1,
-      fileArray.length
-    );
-    imagePath = createPath(fileArray);
-    imagePath = encodeURIComponent(imagePath);
+    if (fileName[1] == "jpg" || fileName[1] == "png") {
+      fileArray = filePath.split("\\");
+      fileArray = fileArray.splice(
+        fileArray.indexOf("files") + 1,
+        fileArray.length
+      );
+      imagePath = createPath(fileArray);
+      imagePath = encodeURIComponent(imagePath);
 
-    const context = {
-      name: req.query.name,
-      imagePath: imagePath,
-      effects: [
-        { name: "grayscale", imagePath: imagePath },
-        { name: "invert", imagePath: imagePath },
-        { name: "sepia", imagePath: imagePath },
-        { name: "none", imagePath: imagePath },
-      ],
-    };
-    res.render("image.hbs", context);
+      const context = {
+        name: req.query.name,
+        imagePath: imagePath,
+        effects: [
+          { name: "grayscale", imagePath: imagePath },
+          { name: "invert", imagePath: imagePath },
+          { name: "sepia", imagePath: imagePath },
+          { name: "none", imagePath: imagePath },
+        ],
+      };
+      console.log(imagePath);
+      res.render("image.hbs", context);
+    } else {
+      fs.readFile(filePath, function (err, data) {
+        let context = { name: req.query.name, content: data };
+        res.render("edit.hbs", context);
+      });
+    }
   } else {
-    fs.readFile(filePath, function (err, data) {
-      let context = { name: req.query.name, content: data };
-      res.render("edit.hbs", context);
-    });
+    res.render("error.hbs", { error: "nie jestes zalogowany" });
   }
 });
 
@@ -474,16 +503,19 @@ app.post("/readConfig", function (req, res) {
 
 //zapis obrazka
 app.post("/saveImage", function (req, res) {
-  let string = req.body.path;
-  console.log(string);
-  let filePath = createPath(rootElements);
-  filePath = path.join(filePath, string);
+  if (isLogged(req.cookies.login)) {
+    let string = req.body.path;
+    console.log(string);
+    let filePath = createPath(rootElements);
+    filePath = path.join(filePath, string);
 
-  let dataUrl = req.body.dataUrl.split(",");
-  dataUrl = dataUrl[1];
+    let dataUrl = req.body.dataUrl.split(",");
+    dataUrl = dataUrl[1];
 
-  const buffer = Buffer.from(dataUrl, "base64");
-  fs.writeFileSync(filePath, buffer);
+    const buffer = Buffer.from(dataUrl, "base64");
+    console.log(filePath);
+    fs.writeFileSync(filePath, buffer);
+  }
 });
 
 //style

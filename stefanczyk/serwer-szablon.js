@@ -68,4 +68,7 @@ npm install nedb
 
 --cookies
 npm install cookie-parser
+
+--nocache
+npm install nocache
 */

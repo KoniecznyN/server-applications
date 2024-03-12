@@ -6,6 +6,7 @@
     "express-handlebars": "^5.3.5",
     "formidable": "^1.2.2",
     "nedb": "^1.8.0",
+    "nocache": "^4.0.0",
     "node": "^21.6.1"
   },
   "name": "stefanczyk",
@@ -16,5 +17,6 @@
   },
   "author": "",
   "license": "ISC",
+  "devDependencies": {},
   "description": ""
 }
