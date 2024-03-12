@@ -1,0 +1,188 @@
+<div id="main">
+    <div id="leftContainer">
+        <div id="editorButton">
+            <div id="minusButton" onclick="fontMinus()"><p>-</p></div>
+            <div id="styleButton" onclick="changeStyle()"><p>style</p></div>
+            <div id="plusButton" onclick="fontPlus()"><p>+</p></div>
+        </div>
+        <div id="btn" onclick="saveConfig()">
+            <p>zapisz ustawienia</p>
+        </div>
+        <div id="btn" onclick="changeName()">
+            <p>zmiana nazwy pliku</p>
+        </div>
+    </div>
+    <div id="rightContainer">
+        <div id="path">
+            <p>{{name}}</p>
+        </div>
+        <form action="/save" method="get">
+            <div id="editor">
+                <div id="numbers"></div>
+                <div class="line" id="line"></div>
+                <textarea id="text" rows="0" name="content" wrap="off">{{content}}</textarea>
+                <input type="hidden" name="name" value="{{name}}">
+            </div>
+            <button id="btn" type="submit" onclick="saveAlert()">zapisz plik</button>
+        </form>
+    </div>
+</div>
+<dialog id="changeName">
+    <div>
+        <form action="/changeFileName" method="get">
+            <p class="dialogText">wprowadź nową nazwę pliku:</p>
+            <input class="dialogInput" type="text" name="name">
+            <input type="hidden" name="oldName" value="{{name}}">
+            <br>
+            <button class="dialogButton" type="submit">OK</button>
+            <input class="dialogButton" type="button" onclick="closeDialog()" value="cancel" />
+        </form>
+    </div>
+</dialog>
+<script>
+    function saveAlert(){
+        alert("zapisano plik")
+    }
+    function changeName() {
+        document.getElementById("changeName").showModal()
+    }
+    function closeDialog() {
+        document.getElementById("changeName").close()
+    }
+</script>
+<script defer>
+    const text = document.getElementById("text")
+    const numbers = document.getElementById("numbers")
+
+    function numbering() {
+        let template = `1\n`
+        let rows = 1
+
+        let array = text.value.split("\n")
+        for (let i = 0; i < array.length - 1; i++) {
+            template += `${i+2}\n`
+            rows++
+        }
+        text.rows = rows
+        numbers.innerText = template
+    }
+
+    function syncScroll(){
+        numbers.scrollTop = text.scrollTop
+    }
+
+    
+    syncScroll()
+    text.onscroll = syncScroll
+
+    numbering()
+    text.onkeyup = numbering
+    text.onkeydown = numbering
+
+
+    var font;
+
+    function fontMinus(){
+        if(font > 10){
+            font -= 5
+         console.log(font)
+            document.getElementById("editor").style.fontSize = font + "px"
+            text.style.fontSize = font + "px" 
+            numbers.style.fontSize = font + "px" 
+        }
+    }
+
+    function fontPlus(){
+        if (font < 30) {
+            font += 5
+         console.log(font)
+            document.getElementById("editor").style.fontSize = font + "px"
+            text.style.fontSize = font + "px"
+            numbers.style.fontSize = font + "px" 
+        }
+    }
+
+    var selectedStyle
+    var backgroundColor
+    var fontColor
+    function changeStyle(){
+        selectedStyle++
+        const style = {
+            first: {
+                backgroundColor: "white",
+                fontColor: "black"
+            },
+            second: {
+                backgroundColor: "black",
+                fontColor: "white"
+            },
+            third: {
+                backgroundColor: "lightgrey",
+                fontColor: "blue"
+            }
+        }
+
+        selectedStyle = (selectedStyle === 4) ? 1 : selectedStyle;
+        if(selectedStyle == 1){
+            setStyle(style.first)
+        }
+        if(selectedStyle == 2){
+            setStyle(style.second)
+        }
+        if(selectedStyle == 3){
+            setStyle(style.third)
+        }
+    }
+
+    function setStyle(obj) {
+            text.style.backgroundColor = obj.backgroundColor;
+            text.style.color = obj.fontColor;
+            numbers.style.backgroundColor = obj.backgroundColor;
+            numbers.style.color = obj.fontColor;
+
+            backgroundColor = obj.backgroundColor
+            fontColor = obj.fontColor
+    }
+    
+    function saveConfig() {
+            const obj = JSON.stringify({
+                backgroundColor: backgroundColor,
+                fontColor: fontColor,
+                selectedStyle: selectedStyle,
+                fontSize: font
+            })
+
+            fetch("http://localhost:3000/saveConfig", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: obj
+            })
+    }   
+
+    function readConfig(){
+        fetch("http://localhost:3000/readConfig", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            text.style.backgroundColor = data.backgroundColor;
+            text.style.color = data.fontColor;
+            text.style.fontSize = `${data.fontSize}px`;
+
+            numbers.style.backgroundColor = data.backgroundColor;
+            numbers.style.color = data.fontColor;
+            numbers.style.fontSize = `${data.fontSize}px`;
+            
+            selectedStyle = data.selectedStyle
+            backgroundColor = data.backgroundColor
+            fontColor = data.fontColor
+            font = data.fontSize
+        })
+    }
+    readConfig()
+</script>

@@ -9,6 +9,10 @@ app.set("views", path.join(__dirname, "views"));
 app.engine("hbs", hbs({ defaultLayout: "main.hbs" }));
 app.set("view engine", "hbs");
 
+//cookies
+const cookieparser = require("cookie-parser");
+app.use(cookieparser());
+
 //baza danych netdb
 const Datastore = require("nedb");
 
@@ -62,4 +66,6 @@ npm install express-handlebars@5.3.5
 --nedb
 npm install nedb
 
+--cookies
+npm install cookie-parser
 */

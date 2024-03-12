@@ -1,0 +1,14 @@
+{
+  "name": "etap-drugi",
+  "version": "1.0.0",
+  "main": "serwer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cookie-parser": "^1.4.6"
+  }
+}
