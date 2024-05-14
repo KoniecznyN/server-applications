@@ -1,5 +1,6 @@
 import { createServer } from 'http';
 import router from "./app/router.js";
+import 'dotenv/config'
 
 createServer((req, res) => router(req, res))
-    .listen(3000, () => console.log("listen on 3000"))
+    .listen(process.env.APP_PORT, () => console.log(`listen on ${process.env.APP_PORT}`))

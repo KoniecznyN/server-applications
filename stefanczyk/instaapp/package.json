@@ -1,11 +1,14 @@
 {
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "formidable": "^1.2.2",
+    "jsonwebtoken": "^9.0.2",
     "node": "^18.20.0"
   },
   "name": "rest-api",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

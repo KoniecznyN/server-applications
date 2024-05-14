@@ -12,7 +12,7 @@ const jsonController = {
       history: [
         {
           status: new Date().getTime(),
-          lastModifiedDate: new Date().getTime(),
+          lastModifiedDate: data.files.file.lastModifiedDate,
         },
       ],
     };
@@ -22,8 +22,8 @@ const jsonController = {
       res(photo);
     });
   },
-  delete: (id) => {},
-  update: (id) => {},
+  delete: (id) => { },
+  update: (id) => { },
   getall: (data) => {
     return data;
   },
