@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Strefa za hasłem"
+AuthUserFile C:/xampp/htdocs/nkonieczny/librus/.htpasswd
+Require valid-user

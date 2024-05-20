@@ -36,18 +36,23 @@ $signs = array("\t", "\n", "\r", "\r\n", "&nbsp;", "<br/>");
 $empty = "";
 $res = str_replace($signs, $empty, $res);
 $res = str_replace("/images/", "./images/", $res);
+
 preg_match_all("|<h3.+?Oceny\sbieżące.+</div>|", $res, $out);
+
 echo $out[0][0];
 
-// $style = Array(
-//     "https://synergia.librus.pl/LibrusStyleSheet2.1674858050.css",
-//     "https://synergia.librus.pl/js/librus-component/dialog/librus-dialog.css?v1",
-//     "https://synergia.librus.pl/js/librus-component/notification/librus-notification.css?v4",
-//     "https://synergia.librus.pl/LibrusStyleSheet2Light.1637964526.css",
-//     "https://synergia.librus.pl/js/librus-component/data-table/librus-data-table.css?v2",
-//     "https://synergia.librus.pl/assets/css/synergia.1615587149.css",
-//     "https://synergia.librus.pl/LibrusStyleSheet2NonIE.1361960241.css"
-// );
+$style = array(
+    "https://synergia.librus.pl/LibrusStyleSheet2.1674858050.css",
+    "https://synergia.librus.pl/js/librus-component/dialog/librus-dialog.css?v1",
+    "https://synergia.librus.pl/js/librus-component/notification/librus-notification.css?v4",
+    "https://synergia.librus.pl/LibrusStyleSheet2Light.1637964526.css",
+    "https://synergia.librus.pl/js/librus-component/data-table/librus-data-table.css?v2",
+    "https://synergia.librus.pl/assets/css/synergia.1615587149.css",
+    "https://synergia.librus.pl/LibrusStyleSheet2NonIE.1361960241.css",
+    "https://synergia.librus.pl/LibrusPrintStyleSheet2.1495831305.css",
+    "https://synergia.librus.pl/jquery.treeview.css"
+
+);
 
 echo "<style>";
 foreach ($style as $a) {
@@ -57,6 +62,12 @@ foreach ($style as $a) {
 ;
 echo '</style>';
 
+echo "<script defer src='https://synergia.librus.pl/wz_dragdrop.js'></script>";
+echo "<script defer src='https://synergia.librus.pl/js/showHideRows.js'></script>";
+echo "<script defer src='https://synergia.librus.pl/ajax.js'></script>";
+echo "<script defer src='https://synergia.librus.pl/js/cookie.js'></script>";
+echo "<script defer src='https://synergia.librus.pl/js/cookieBox.js'></script>";
+echo "<script defer src='https://synergia.librus.pl/js/librus-component/dialog/librus-dialog.1585948224.js'></script>";
 
 //oceny z waga ==============================================================================
 $html = $out[0][0];
@@ -66,6 +77,8 @@ $doc = new DOMDocument();
 $xpath = new DOMXpath($doc);
 // $res = $xpath->query("//a[@title and contains(@title, 'Waga')]");
 
+
+//oceny zwykle
 $pierwszy_semestr = [
     "biologia" => [],
     "chemia" => [],
@@ -146,19 +159,109 @@ foreach ($przedmioty as $key => $value) {
     $drugi_semestr[utf8_decode($przedmiot)] = $pom2;
 }
 
-$oceny = [
+$ocenyZwykle = [
     "pierwszy_semestr" => $pierwszy_semestr,
     "drugi_semestr" => $drugi_semestr,
 ];
 
 echo "<script>";
-echo "var oceny = " . json_encode($oceny) . ";";
+echo "var ocenyZwykle = " . json_encode($ocenyZwykle) . ";";
 echo "</script>";
-
 
 // echo "<pre>";
 // print_r($oceny);
 // echo "</pre>";
+
+//=========================================================================================================================================================
+
+//oceny punktowe
+$pierwszy_semestr = [
+    "aplikacje klienckie" => [],
+    "aplikacje serwerowe" => [],
+    "bazy danych" => [],
+    "fizyka" => [],
+    "matematyka" => [],
+
+];
+
+$drugi_semestr = [
+    "aplikacje klienckie" => [],
+    "aplikacje serwerowe" => [],
+    "bazy danych" => [],
+    "fizyka" => [],
+    "matematyka" => [],
+
+];
+
+$przedmioty = ["aplikacje klienckie", "aplikacje serwerowe", "bazy danych", "fizyka", "matematyka"];
+
+foreach ($przedmioty as $key => $value) {
+    $pom1 = [];
+    $pom2 = [];
+
+    $przedmiot = $value;
+    $przedmiot = utf8_encode($przedmiot);
+
+    $res = $xpath->query("//td[contains(.,'$przedmiot')]/following-sibling::td//span//a[contains(@href, '/przegladaj_oceny_punktowe')]");
+    foreach ($res as $key) {
+        $ocena = $key->nodeValue;
+        $a = $key->attributes;
+
+        // $dupa = print_r($a[0]);
+        foreach ($a as $key) {
+            if ($key->name == 'title') {
+                $att = $key->nodeValue;
+                // $regular_verb = '/Nauczyciel:\s*([A-Za-ząćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]+)/u';
+                // if (preg_match($regular_verb, $att, $wynik)) {
+                //     $imie_i_nazwisko = $wynik[1];
+                // }
+
+                $regular_verb = '/Data:\s*(\d{4}-\d{2}-\d{2})/u';
+                if (preg_match($regular_verb, $att, $wynik)) {
+                    $data = $wynik[1];
+                }
+                //2024.18.01 zaczyna sie drugi semestr
+                $data_array = explode("-", $data);
+                if ((int) $data_array[0] == 2024 && (((int) $data_array[1] == 1 && (int) $data_array[2] >= 18)) || ((int) $data_array[1] < 6 && (int) $data_array[1] > 1)) {
+                    $semestr = 'drugi';
+                } else {
+                    $semestr = 'pierwszy';
+                }
+            }
+        }
+
+        $ocenaArray = explode("/", $ocena);
+
+        $info_o_ocenie = [
+            "ocena" => $ocenaArray[0],
+            "waga" => $ocenaArray[1],
+        ];
+
+        if ($semestr == 'pierwszy') {
+            array_push($pom1, $info_o_ocenie);
+        } else {
+            array_push($pom2, $info_o_ocenie);
+        }
+    }
+    $pierwszy_semestr[utf8_decode($przedmiot)] = $pom1;
+    $drugi_semestr[utf8_decode($przedmiot)] = $pom2;
+}
+
+$ocenyPunktowe = [
+    "pierwszy_semestr" => $pierwszy_semestr,
+    "drugi_semestr" => $drugi_semestr,
+];
+
+echo "<script>";
+echo "var ocenyPunktowe = " . json_encode($ocenyPunktowe) . ";";
+echo "</script>";
+
+// echo "<pre>";
+// print_r($ocenyPunktowe);
+// echo "</pre>";
+
+//=========================================================================================================================================================
+
 
 function get($url)
 {
@@ -180,7 +283,8 @@ function post($fields, $url)
 }
 
 ?>
-<script>
+<script defer>
+
     function changeEventListeners(table) {
         const array = table.children
         for (let i = 0; i < array.length; i++) {
@@ -204,10 +308,6 @@ function post($fields, $url)
     }
 
     function countAverage(array, semester, subject) {
-
-        console.log(array);
-        console.log(semester);
-        console.log(subject);
         const subjectArray = array[semester.toString()][subject.toString()]
         if (subjectArray == undefined) {
             return "---"
@@ -227,7 +327,26 @@ function post($fields, $url)
 
     }
 
-    countAverage(oceny, "pierwszy_semestr", "biologia")
+    function countAveragePointed(array, semester, subject) {
+        const subjectArray = array[semester.toString()][subject.toString()]
+        if (subjectArray == undefined) {
+            return "---"
+        } else {
+            console.log(subjectArray);
+            let ocena = 0
+            let wagi = 0
+            for (let i = 0; i < subjectArray.length; i++) {
+                ocena += parseFloat(subjectArray[i].ocena)
+                wagi += parseInt(subjectArray[i].waga)
+            }
+            let result = (ocena / wagi) * 100
+            console.log(result);
+            return result.toFixed(0) + "%"
+        }
+    }
+
+    console.log(ocenyZwykle);
+    console.log(ocenyPunktowe);
 
     // console.log(oceny);
 
@@ -236,18 +355,35 @@ function post($fields, $url)
             if (i % 2 == 0) {
                 let row = table.children[i]
                 let subject = row.children[1].innerText
-                row.children[3].innerText = countAverage(oceny, "pierwszy_semestr", subject)
-                row.children[7].innerText = countAverage(oceny, "drugi_semestr", subject)
+
+                if (countAverage(ocenyZwykle, "pierwszy_semestr", subject) != "---") {
+                    row.children[3].innerText = countAverage(ocenyZwykle, "pierwszy_semestr", subject)
+                } else {
+                    row.children[3].innerText = countAveragePointed(ocenyPunktowe, "pierwszy_semestr", subject)
+                }
+
+                if (countAverage(ocenyZwykle, "drugi_semestr", subject) != "---") {
+                    row.children[7].innerText = countAverage(ocenyZwykle, "drugi_semestr", subject)
+                } else {
+                    row.children[7].innerText = countAveragePointed(ocenyPunktowe, "drugi_semestr", subject)
+                }
+
+
+
                 if (row.children[3].innerText != "---") {
                     let yearlyAverage = (parseFloat(row.children[3].innerText) + parseFloat(row.children[7].innerText)) / 2
-                    row.children[9].innerText = yearlyAverage.toFixed(2)
+                    if (yearlyAverage > 10) {
+                        row.children[9].innerText = yearlyAverage.toFixed(0) + "%"
+                    } else {
+                        row.children[9].innerText = yearlyAverage.toFixed(2)
+
+                    }
                 } else {
                     row.children[9].innerText = "---"
                 }
             }
         }
     }
-
 
     const firstTable = document.querySelector("body > table:nth-child(3) > tbody")
     const secondTable = document.querySelector("body > table:nth-child(12) > tbody")
