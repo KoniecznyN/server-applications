@@ -43,6 +43,13 @@ const fileController = {
       });
     });
   },
+  delete: (data, element) => {
+    const photoPath = __dirname + element.url
+
+    fs.unlink(photoPath, function (err) {
+      if (err) throw err;
+    })
+  }
 };
 
 export { fileController };

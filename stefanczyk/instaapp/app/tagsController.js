@@ -1,9 +1,6 @@
 const tagsController = {
-    convertTags: (tags) => {
-        let convertedTags = []
-        for (let i = 0; i < tags.length; i++) {
-
-        }
+    getone: (data, id) => {
+        return data.find(element => element.id == id)
     }
 }
 

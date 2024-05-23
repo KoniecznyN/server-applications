@@ -35,4 +35,19 @@ let tags = [
   "#food"
 ]
 
-export { photos, tags, addPhoto, deletePhoto };
+const convertedTags = convertTags(tags)
+
+function convertTags(tags) {
+  let convertedTags = []
+  for (let i = 0; i < tags.length; i++) {
+    convertedTags.push({
+      id: i,
+      name: tags[i],
+      popularity: (Math.random() * 100).toFixed(0)
+    })
+  }
+  return convertedTags
+
+}
+
+export { photos, tags, convertedTags, addPhoto, deletePhoto };

@@ -23,7 +23,7 @@ const jsonController = {
       res(photo);
     });
   },
-  delete: (id) => {
+  delete: (data, id) => {
     deletePhoto(id)
   },
   update: (id) => { },
