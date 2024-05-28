@@ -2,9 +2,9 @@
 GET http://localhost:3000/api/photos HTTP/1.1
 ### GET - pobierz jeden element
 GET http://localhost:3000/api/photos/1715849261125 HTTP/1.1
-### GET - pobierz jeden element
-DELETE http://localhost:3000/api/photos/1716454527674 HTTP/1.1
-### GET - usun jeden element
+### DELETE - usun jeden element
+DELETE http://localhost:3000/api/photos/1716928591581 HTTP/1.1
+### POST - dodaj jeden element
 POST http://localhost:3000/api/photos HTTP/1.1
 Content-Type: multipart/form-data; boundary=----FormBoundary1234
 
@@ -20,3 +20,13 @@ Content-Type: text/plain
 
 album10
 ------FormBoundary1234
+
+### PATCH - aktualizuj tagi
+PATCH http://localhost:3000/api/photos/tags/1716931088036 HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "nowytag"
+}
+### GET - pobierz tagi
+GET http://localhost:3000/api/photos/tags/1716931683020 HTTP/1.1

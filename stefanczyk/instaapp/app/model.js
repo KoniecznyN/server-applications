@@ -5,8 +5,10 @@ const addPhoto = (data) => {
 };
 
 const deletePhoto = (id) => {
-  photos = photos.filter(element => element.id.toString() != id)
-}
+  photos = photos.filter((element) => element.id.toString() != id);
+};
+
+const addTagToPhoto = (tag, id) => {};
 
 let tags = [
   "#love",
@@ -32,22 +34,34 @@ let tags = [
   "#like4like",
   "#beauty",
   "#fitness",
-  "#food"
-]
+  "#food",
+];
 
-const convertedTags = convertTags(tags)
-
-function convertTags(tags) {
-  let convertedTags = []
+const convertTags = (tags) => {
+  let convertedTags = [];
   for (let i = 0; i < tags.length; i++) {
     convertedTags.push({
       id: i,
       name: tags[i],
-      popularity: (Math.random() * 100).toFixed(0)
-    })
+      popularity: (Math.random() * 100).toFixed(0),
+    });
   }
-  return convertedTags
+  return convertedTags;
+};
 
-}
+let convertedTags = convertTags(tags);
 
-export { photos, tags, convertedTags, addPhoto, deletePhoto };
+const addTag = (tag) => {
+  tag = JSON.parse(tag);
+  console.log(tag);
+  console.log(tag.name);
+  console.log(tag.popularity);
+  convertedTags.push({
+    id: tags.length,
+    name: tag.name,
+    popularity: tag.popularity,
+  });
+  tags.push(tag.name);
+};
+
+export { photos, addPhoto, deletePhoto, tags, convertedTags, addTag };

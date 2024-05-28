@@ -1,5 +1,5 @@
-import { addPhoto } from "./model.js";
-import { deletePhoto } from "./model.js"
+import { addPhoto, tags } from "../model.js";
+import { deletePhoto } from "../model.js";
 
 const jsonController = {
   add: async (data) => {
@@ -16,6 +16,11 @@ const jsonController = {
           lastModifiedDate: data.files.file.lastModifiedDate,
         },
       ],
+      tags: [
+        {
+          name: "default",
+        },
+      ],
     };
 
     addPhoto(photo);
@@ -24,25 +29,22 @@ const jsonController = {
     });
   },
   delete: (data, id) => {
-    deletePhoto(id)
+    deletePhoto(id);
   },
-  update: (id) => { },
+  update: (id) => {},
   getone: (data, id) => {
-    // data.forEach(element => {
-    //   const elementId = element.id.toString()
-    //   if (elementId == id) {
-    //     console.log(element);
-    //     result = element
-    //     return result
-    //   }
-    // });
-
-    // let x = [{ a: 1 }, { a: 2, b: 7 }, { a: 2, b: 8 }].filter(element => element.a == 2)
-
-    return data.find(element => element.id.toString() == id)
+    return data.find((element) => element.id.toString() == id);
   },
   getall: (data) => {
     return data;
+  },
+  addTagToPhoto: (data, id) => {},
+  getPhotoTags: (data, id) => {
+    let photo = data.find((element) => element.id == id);
+    return {
+      id: id,
+      tags: photo.tags,
+    };
   },
 };
 
