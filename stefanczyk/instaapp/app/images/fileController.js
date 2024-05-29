@@ -6,17 +6,28 @@ const __dirname = path.resolve();
 
 const fileController = {
   upload: async (req) => {
-    let form = formidable({});
-    let oldPath;
+    console.log(formidable({}));
+
+    const options = {
+      uploadDir: __dirname + "/upload",
+      multiples: true,
+      keepExtensions: true,
+      allowEmptyFiles: false,
+    };
+
+    let oldPath = "";
     let newPath;
-    form.keepExtensions = true;
-    form.uploadDir = __dirname + "/upload";
+    let form = formidable(options);
+    // form.multiples = true;
+    // form.keepExtensions = true;
+    // form.uploadDir = __dirname + "/upload";
     return new Promise((res) => {
       form.parse(req, function (err, fields, files) {
+        console.log(files);
         oldPath = files.file.path;
         let photoName = oldPath.split("\\");
         photoName = photoName[photoName.length - 1];
-        let albumPath = path.join(__dirname, "upload", fields.album);
+        let albumPath = __dirname + "\\upload\\" + fields.album;
         newPath = albumPath + "\\" + photoName;
         if (!fs.existsSync(albumPath)) {
           fs.mkdir(albumPath, (err) => {
