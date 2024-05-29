@@ -8,7 +8,34 @@ const deletePhoto = (id) => {
   photos = photos.filter((element) => element.id.toString() != id);
 };
 
-const addTagToPhoto = (tag, id) => {};
+const patchPhoto = (data) => {
+  let photo = photos.find((element) => element.id == data.id);
+  const index = photos.findIndex((element) => {
+    element.id == data.id;
+  });
+  photo.history.push({
+    status: data.status,
+    timestamp: data.timestamp,
+  });
+  photos[index] = photo;
+};
+
+const addTagToPhoto = (data) => {
+  let photo = photos.find((element) => element.id == data.id);
+  const index = photos.findIndex((element) => {
+    element.id == data.id;
+  });
+  if (data.name == undefined) {
+    data.tags.forEach((element) => {
+      photo.tags.push(element);
+    });
+  } else {
+    photo.tags.push({
+      name: data.name,
+    });
+  }
+  photos[index] = photo;
+};
 
 let tags = [
   "#love",
@@ -53,9 +80,6 @@ let convertedTags = convertTags(tags);
 
 const addTag = (tag) => {
   tag = JSON.parse(tag);
-  console.log(tag);
-  console.log(tag.name);
-  console.log(tag.popularity);
   convertedTags.push({
     id: tags.length,
     name: tag.name,
@@ -64,4 +88,13 @@ const addTag = (tag) => {
   tags.push(tag.name);
 };
 
-export { photos, addPhoto, deletePhoto, tags, convertedTags, addTag };
+export {
+  photos,
+  addPhoto,
+  deletePhoto,
+  patchPhoto,
+  addTagToPhoto,
+  tags,
+  convertedTags,
+  addTag,
+};

@@ -1,5 +1,7 @@
 import { addPhoto, tags } from "../model.js";
 import { deletePhoto } from "../model.js";
+import { patchPhoto } from "../model.js";
+import { addTagToPhoto } from "../model.js";
 
 const jsonController = {
   add: async (data) => {
@@ -18,7 +20,7 @@ const jsonController = {
       ],
       tags: [
         {
-          name: "default",
+          name: "none",
         },
       ],
     };
@@ -31,15 +33,19 @@ const jsonController = {
   delete: (data, id) => {
     deletePhoto(id);
   },
-  update: (id) => {},
+  update: (data, id) => {
+    patchPhoto(data, id);
+  },
   getone: (data, id) => {
     return data.find((element) => element.id.toString() == id);
   },
   getall: (data) => {
     return data;
   },
-  addTagToPhoto: (data, id) => {},
-  getPhotoTags: (data, id) => {
+  addtagtophoto: (data) => {
+    addTagToPhoto(data);
+  },
+  getphototags: (data, id) => {
     let photo = data.find((element) => element.id == id);
     return {
       id: id,

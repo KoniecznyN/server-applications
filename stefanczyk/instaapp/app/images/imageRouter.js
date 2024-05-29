@@ -4,10 +4,13 @@ import { photos } from "../model.js";
 import { getRequestData } from "../getRequestData.js";
 
 const imageRouter = async (req, res) => {
+  //=====pobranie wszystkich zdjec=====
   if (req.url == "/api/photos" && req.method == "GET") {
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
     res.end(JSON.stringify(jsonController.getall(photos)));
   }
+
+  //=====pobranie jednego zdjecia=====
   if (req.url.match(/\/api\/photos\/([0-9]+)/) && req.method == "GET") {
     const array = req.url.split("/");
     const id = array[array.length - 1];
@@ -16,6 +19,8 @@ const imageRouter = async (req, res) => {
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
     res.end(JSON.stringify(photo));
   }
+
+  //=====upload zdjecia=====
   if (req.url == "/api/photos" && req.method == "POST") {
     const photoInfo = await fileController.upload(req);
     const jsonInfo = await jsonController.add(photoInfo);
@@ -23,6 +28,8 @@ const imageRouter = async (req, res) => {
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
     res.end(JSON.stringify(jsonInfo));
   }
+
+  //=====usuniecie wybranego zdjecia=====
   if (req.url.match(/\/api\/photos\/([0-9]+)/) && req.method == "DELETE") {
     const array = req.url.split("/");
     const id = array[array.length - 1];
@@ -37,23 +44,40 @@ const imageRouter = async (req, res) => {
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
     res.end(JSON.stringify(message));
   }
+
+  //=====upload zdjecia=====
   if (req.url == "/api/photos" && req.method == "PATCH") {
+    const data = JSON.parse(await getRequestData(req));
+    jsonController.update(data);
+
+    res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
+    res.end(JSON.stringify(jsonController.getone(photos, data.id)));
   }
 
-  if (req.url.match(/\/api\/photos\/tags\/([0-9]+)/) && req.method == "PATCH") {
-    const data = await getRequestData(req);
-    console.log(data);
+  //=====dodanie jednego tagu do zdjecia=====
+  if (req.url == "/api/photos/tags" && req.method == "PATCH") {
+    const data = JSON.parse(await getRequestData(req));
+    jsonController.addtagtophoto(data);
+
+    res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
+    res.end(JSON.stringify(jsonController.getone(photos, data.id)));
   }
-  if (
-    req.url.match(/\/api\/photos\/tags\/mass\/([0-9]+)/) &&
-    req.method == "PATCH"
-  ) {
+
+  //=====dodanie kilku tagów=====
+  if (req.url == "/api/photos/tags/mass" && req.method == "PATCH") {
+    const data = JSON.parse(await getRequestData(req));
+    jsonController.addtagtophoto(data);
+
+    res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
+    res.end(JSON.stringify(jsonController.getone(photos, data.id)));
   }
+
+  //=====pobranie wszystkich tagow danego zdjecia=====
   if (req.url.match(/\/api\/photos\/tags\/([0-9]+)/) && req.method == "GET") {
     const array = req.url.split("/");
     const id = array[array.length - 1];
 
-    const photoTags = jsonController.getPhotoTags(photos, id);
+    const photoTags = jsonController.getphototags(photos, id);
 
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
     res.end(JSON.stringify(photoTags));

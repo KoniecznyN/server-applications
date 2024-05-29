@@ -4,7 +4,8 @@
     "dotenv": "^16.4.5",
     "formidable": "^1.2.2",
     "jsonwebtoken": "^9.0.2",
-    "node": "^18.20.0"
+    "node": "^18.20.0",
+    "sharp": "^0.32.0"
   },
   "name": "rest-api",
   "version": "1.0.0",
