@@ -34,7 +34,7 @@ const imageRouter = async (req, res) => {
     const array = req.url.split("/");
     const id = array[array.length - 1];
     const photo = jsonController.getone(photos, id);
-    jsonController.delete(photos, id);
+    jsonController.delete(id);
     fileController.delete(photo);
 
     let message = {

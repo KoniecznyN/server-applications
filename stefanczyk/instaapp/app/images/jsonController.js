@@ -1,11 +1,10 @@
-import { addPhoto, tags } from "../model.js";
+import { addPhoto } from "../model.js";
 import { deletePhoto } from "../model.js";
 import { patchPhoto } from "../model.js";
 import { addTagToPhoto } from "../model.js";
 
 const jsonController = {
   add: async (data) => {
-    console.log(data);
     const photo = {
       id: new Date().getTime(),
       album: data.fields.album,
@@ -14,15 +13,11 @@ const jsonController = {
       lastChange: "original",
       history: [
         {
-          status: new Date().getTime(),
-          lastModifiedDate: data.files.file.lastModifiedDate,
+          status: "original",
+          lastModifiedDate: new Date().getTime(),
         },
       ],
-      tags: [
-        {
-          name: "none",
-        },
-      ],
+      tags: [],
     };
 
     addPhoto(photo);
@@ -30,7 +25,7 @@ const jsonController = {
       res(photo);
     });
   },
-  delete: (data, id) => {
+  delete: (id) => {
     deletePhoto(id);
   },
   update: (data, id) => {
