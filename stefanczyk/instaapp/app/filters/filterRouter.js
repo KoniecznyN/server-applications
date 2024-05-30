@@ -18,7 +18,7 @@ const filtersRouter = async (req, res) => {
 
     console.log(photoPath);
 
-    const metaData = JSON.parse(await filtersController.getMetaData(photoPath));
+    const metaData = await filtersController.getMetaData(photoPath);
     console.log(metaData);
 
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });

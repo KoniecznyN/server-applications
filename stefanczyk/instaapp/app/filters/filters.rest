@@ -1,5 +1,5 @@
 ### GET - pobranie metadaty wybarnego zdjecia
-GET http://localhost:3000/api/filters/metadata/1717019121237 HTTP/1.1
+GET http://localhost:3000/api/filters/metadata/1717055971779 HTTP/1.1
 
 ### PATCH - uzycie filtra
 PATCH  http://localhost:3000/api/filters HTTP/1.1

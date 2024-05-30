@@ -7,6 +7,8 @@ const __dirname = path.resolve();
 const fileController = {
   upload: async (req) => {
     console.log(formidable({}));
+    let oldPath = "";
+    let newPath;
 
     const options = {
       uploadDir: __dirname + "/upload",
@@ -15,13 +17,11 @@ const fileController = {
       allowEmptyFiles: false,
     };
 
-    let oldPath = "";
-    let newPath;
-    let form = formidable(options);
     // form.multiples = true;
     // form.keepExtensions = true;
     // form.uploadDir = __dirname + "/upload";
     return new Promise((res) => {
+      const form = formidable(options);
       form.parse(req, function (err, fields, files) {
         console.log(files);
         oldPath = files.file.path;
