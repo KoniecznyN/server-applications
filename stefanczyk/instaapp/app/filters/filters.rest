@@ -6,7 +6,7 @@ PATCH  http://localhost:3000/api/filters HTTP/1.1
 Content-Type: application/json
 
 {
-    "id": 1717072081104,
-    "filter": "tint",
+    "id": 1717078124410,
+    "filter": "grayscale",
     "options": {"r": 255, "g":0, "b":0}
 }

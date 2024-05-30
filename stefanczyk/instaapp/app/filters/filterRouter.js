@@ -12,7 +12,7 @@ const filtersRouter = async (req, res) => {
   ) {
     const array = req.url.split("/");
     const id = array[array.length - 1];
-    const photo = jsonController.getone(photos, id);
+    const photo = jsonController.getOne(photos, id);
 
     const metaData = await filtersController.getMetaData(photo.url);
 
@@ -23,7 +23,7 @@ const filtersRouter = async (req, res) => {
   //=====uzycie filtra=====
   if (req.url == "/api/filters" && req.method == "PATCH") {
     const data = JSON.parse(await getRequestData(req));
-    const photo = jsonController.getone(photos, data.id);
+    const photo = jsonController.getOne(photos, data.id);
 
     filtersController.useFilter(photo, data.filter, data.options);
 
