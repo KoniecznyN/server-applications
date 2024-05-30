@@ -5,7 +5,10 @@ import { filtersRouter } from "./app/filters/filterRouter.js";
 import "dotenv/config";
 
 createServer(async (req, res) => {
-  if (req.url.search("/api/photos") != -1) {
+  if (
+    req.url.search("/api/photos") != -1 ||
+    req.url.search("/api/getimage") != -1
+  ) {
     await imageRouter(req, res);
   } else if (req.url.search("/api/tags") != -1) {
     await tagsRouter(req, res);

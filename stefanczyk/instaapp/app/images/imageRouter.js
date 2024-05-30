@@ -82,6 +82,30 @@ const imageRouter = async (req, res) => {
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
     res.end(JSON.stringify(photoTags));
   }
+
+  //=====pobranie pliku wybarnego zdjecia=====
+  if (req.url.match(/\/api\/getimage\/([0-9]+)/) && req.method == "GET") {
+    const array = req.url.split("/");
+    const id = array[array.length - 1];
+
+    const photo = jsonController.getone(photos, id);
+
+    fileController.getone(photo, res);
+  }
+
+  //=====pobranie pliku przefiltrowanego zdjecia=====
+  if (
+    req.url.match(/\/api\/getimage\/(tint|grayscale|negate)\/([0-9]+)/) &&
+    req.method == "GET"
+  ) {
+    const array = req.url.split("/");
+    const id = array[array.length - 1];
+    const filter = array[array.length - 2];
+
+    const photo = jsonController.getone(photos, id);
+
+    fileController.getone(photo, res, filter);
+  }
 };
 
 export { imageRouter };

@@ -6,7 +6,6 @@ const __dirname = path.resolve();
 
 const fileController = {
   upload: async (req) => {
-    console.log(formidable({}));
     let oldPath = "";
     let newPath;
 
@@ -17,18 +16,15 @@ const fileController = {
       allowEmptyFiles: false,
     };
 
-    // form.multiples = true;
-    // form.keepExtensions = true;
-    // form.uploadDir = __dirname + "/upload";
     return new Promise((res) => {
       const form = formidable(options);
       form.parse(req, function (err, fields, files) {
-        console.log(files);
         oldPath = files.file.path;
         let photoName = oldPath.split("\\");
         photoName = photoName[photoName.length - 1];
         let albumPath = __dirname + "\\upload\\" + fields.album;
         newPath = albumPath + "\\" + photoName;
+
         if (!fs.existsSync(albumPath)) {
           fs.mkdir(albumPath, (err) => {
             if (err) throw err;
@@ -52,6 +48,23 @@ const fileController = {
           url: url,
         });
       });
+    });
+  },
+  getone: (photo, res, filter) => {
+    let photoPath;
+    let photoUrl = photo.url;
+
+    if (filter == undefined) {
+      photoPath = __dirname + photoUrl;
+    } else {
+      photoUrl = photoUrl.split(".");
+      photoPath = `${__dirname}${photoUrl[0]}-${filter}.${photoUrl[1]}`;
+    }
+
+    fs.readFile(photoPath, (err, data) => {
+      res.writeHead(200, { "Content-Type": "image/jpeg;charset=utf-8" });
+      res.end(data);
+      if (err) throw err;
     });
   },
   delete: (element) => {

@@ -15,7 +15,7 @@ Content-Type: multipart/form-data; boundary=----FormBoundary1234
 Content-Disposition: form-data; name="file"; filename="input.jpg"
 Content-Type: image/jpeg
 
-< C:\INNE\moje\szkoła\APLIKACJE\server-applications\stefanczyk\instaapp\input.jpg
+< ../../input.jpg
 
 ------FormBoundary1234
 Content-Disposition: form-data; name="album"
@@ -56,4 +56,10 @@ Content-Type: application/json
 }
 
 ### GET - pobierz tagi
-GET http://localhost:3000/api/photos/tags/1717020863855 HTTP/1.1
+GET http://localhost:3000/api/photos/tags/1717069310773 HTTP/1.1
+
+### GET - pobranie pliku wybarnego zdjecia
+GET http://localhost:3000/api/getimage/1717069412483 HTTP/1.1
+
+### GET - pobranie pliku przefiltrowanego zdjecia
+GET http://localhost:3000/api/getimage/1717068729417/filter HTTP/1.1
