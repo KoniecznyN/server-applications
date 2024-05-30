@@ -88,6 +88,10 @@ const addTag = (tag) => {
   tags.push(tag.name);
 };
 
+let users = [];
+
+const addUser = () => {};
+
 export {
   photos,
   addPhoto,

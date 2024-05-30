@@ -7,14 +7,14 @@ const imageRouter = async (req, res) => {
   //=====pobranie wszystkich zdjec=====
   if (req.url == "/api/photos" && req.method == "GET") {
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
-    res.end(JSON.stringify(jsonController.getall(photos)));
+    res.end(JSON.stringify(jsonController.getAll(photos)));
   }
 
   //=====pobranie jednego zdjecia=====
   if (req.url.match(/\/api\/photos\/([0-9]+)/) && req.method == "GET") {
     const array = req.url.split("/");
     const id = array[array.length - 1];
-    let photo = jsonController.getone(photos, id);
+    let photo = jsonController.getOne(photos, id);
 
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
     res.end(JSON.stringify(photo));
@@ -33,7 +33,7 @@ const imageRouter = async (req, res) => {
   if (req.url.match(/\/api\/photos\/([0-9]+)/) && req.method == "DELETE") {
     const array = req.url.split("/");
     const id = array[array.length - 1];
-    const photo = jsonController.getone(photos, id);
+    const photo = jsonController.getOne(photos, id);
     jsonController.delete(id);
     fileController.delete(photo);
 
@@ -51,25 +51,25 @@ const imageRouter = async (req, res) => {
     jsonController.update(data);
 
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
-    res.end(JSON.stringify(jsonController.getone(photos, data.id)));
+    res.end(JSON.stringify(jsonController.getOne(photos, data.id)));
   }
 
   //=====dodanie jednego tagu do zdjecia=====
   if (req.url == "/api/photos/tags" && req.method == "PATCH") {
     const data = JSON.parse(await getRequestData(req));
-    jsonController.addtagtophoto(data);
+    jsonController.addTagToPhoto(data);
 
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
-    res.end(JSON.stringify(jsonController.getone(photos, data.id)));
+    res.end(JSON.stringify(jsonController.getOne(photos, data.id)));
   }
 
   //=====dodanie kilku tagów=====
   if (req.url == "/api/photos/tags/mass" && req.method == "PATCH") {
     const data = JSON.parse(await getRequestData(req));
-    jsonController.addtagtophoto(data);
+    jsonController.addTagToPhoto(data);
 
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
-    res.end(JSON.stringify(jsonController.getone(photos, data.id)));
+    res.end(JSON.stringify(jsonController.getOne(photos, data.id)));
   }
 
   //=====pobranie wszystkich tagow danego zdjecia=====
@@ -77,7 +77,7 @@ const imageRouter = async (req, res) => {
     const array = req.url.split("/");
     const id = array[array.length - 1];
 
-    const photoTags = jsonController.getphototags(photos, id);
+    const photoTags = jsonController.getPhotoTags(photos, id);
 
     res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
     res.end(JSON.stringify(photoTags));
@@ -88,9 +88,9 @@ const imageRouter = async (req, res) => {
     const array = req.url.split("/");
     const id = array[array.length - 1];
 
-    const photo = jsonController.getone(photos, id);
+    const photo = jsonController.getOne(photos, id);
 
-    fileController.getone(photo, res);
+    fileController.getOne(photo, res);
   }
 
   //=====pobranie pliku przefiltrowanego zdjecia=====
@@ -102,9 +102,9 @@ const imageRouter = async (req, res) => {
     const id = array[array.length - 1];
     const filter = array[array.length - 2];
 
-    const photo = jsonController.getone(photos, id);
+    const photo = jsonController.getOne(photos, id);
 
-    fileController.getone(photo, res, filter);
+    fileController.getOne(photo, res, filter);
   }
 };
 

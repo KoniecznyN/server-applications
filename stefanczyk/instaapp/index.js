@@ -2,6 +2,7 @@ import { createServer } from "http";
 import { imageRouter } from "./app/images/imageRouter.js";
 import { tagsRouter } from "./app/tags/tagsRouter.js";
 import { filtersRouter } from "./app/filters/filterRouter.js";
+import { userRouter } from "./app/users/userRouter.js";
 import "dotenv/config";
 
 createServer(async (req, res) => {
@@ -14,6 +15,8 @@ createServer(async (req, res) => {
     await tagsRouter(req, res);
   } else if (req.url.search("/api/filters") != -1) {
     await filtersRouter(req, res);
+  } else if (req.url.search("/api/user") != -1) {
+    await userRouter(req, res);
   }
 }).listen(process.env.APP_PORT, () =>
   console.log(`listen on ${process.env.APP_PORT}`)

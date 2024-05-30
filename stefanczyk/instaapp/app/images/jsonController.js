@@ -31,16 +31,16 @@ const jsonController = {
   update: (data, id) => {
     patchPhoto(data, id);
   },
-  getone: (data, id) => {
+  getOne: (data, id) => {
     return data.find((element) => element.id.toString() == id);
   },
-  getall: (data) => {
+  getAll: (data) => {
     return data;
   },
-  addtagtophoto: (data) => {
+  addTagToPhoto: (data) => {
     addTagToPhoto(data);
   },
-  getphototags: (data, id) => {
+  getPhotoTags: (data, id) => {
     let photo = data.find((element) => element.id == id);
     return {
       id: id,

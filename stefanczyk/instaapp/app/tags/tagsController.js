@@ -4,10 +4,10 @@ const tagsController = {
   add: (tag) => {
     addTag(tag);
   },
-  getone: (data, id) => {
+  getOne: (data, id) => {
     return data.find((element) => element.id == id);
   },
-  getall: (data) => {
+  getAll: (data) => {
     return data;
   },
 };

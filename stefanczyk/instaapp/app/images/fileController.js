@@ -50,7 +50,7 @@ const fileController = {
       });
     });
   },
-  getone: (photo, res, filter) => {
+  getOne: (photo, res, filter) => {
     let photoPath;
     let photoUrl = photo.url;
 
