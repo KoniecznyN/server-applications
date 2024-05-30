@@ -90,7 +90,16 @@ const addTag = (tag) => {
 
 let users = [];
 
-const addUser = () => {};
+const addUser = (data, password) => {
+  users.push({
+    id: (Math.random() * 1000).toFixed(0),
+    name: data.name,
+    lastName: data.lastName,
+    email: data.email,
+    confirmed: false,
+    password: password,
+  });
+};
 
 export {
   photos,
@@ -101,4 +110,6 @@ export {
   tags,
   convertedTags,
   addTag,
+  users,
+  addUser,
 };
