@@ -1,0 +1,12 @@
+### GET - pobranie metadaty wybarnego zdjecia
+GET http://localhost:3000/api/filters/metadata/1717066134167 HTTP/1.1
+
+### PATCH - uzycie filtra
+PATCH  http://localhost:3000/api/filters HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": 1717137762470,
+    "filter": "tint",
+    "options": {"r": 255, "g":0, "b":0}
+}
