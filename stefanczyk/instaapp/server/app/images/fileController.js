@@ -5,12 +5,12 @@ import fs from "fs";
 const __dirname = path.resolve();
 
 const fileController = {
-  upload: async (req) => {
+  upload: async (req, user) => {
     let oldPath = "";
     let newPath;
 
     const options = {
-      uploadDir: __dirname + "/upload",
+      uploadDir: __dirname + "/upload/",
       multiples: true,
       keepExtensions: true,
       allowEmptyFiles: false,
@@ -19,10 +19,11 @@ const fileController = {
     return new Promise((res) => {
       const form = formidable(options);
       form.parse(req, function (err, fields, files) {
+        let tags = fields.tags.split(",");
         oldPath = files.file.path;
         let photoName = oldPath.split("\\");
         photoName = photoName[photoName.length - 1];
-        let albumPath = __dirname + "\\upload\\" + fields.album;
+        let albumPath = user.rootPath;
         newPath = albumPath + "\\" + photoName;
 
         if (!fs.existsSync(albumPath)) {
@@ -43,8 +44,9 @@ const fileController = {
         });
 
         res({
-          fields: fields,
+          tags: tags,
           files: files,
+          user: user.email,
           url: url,
         });
       });
@@ -62,6 +64,13 @@ const fileController = {
     }
 
     fs.readFile(photoPath, (err, data) => {
+      res.writeHead(200, { "Content-Type": "image/jpeg;charset=utf-8" });
+      res.end(data);
+      if (err) throw err;
+    });
+  },
+  getProfilePicture: (path, res) => {
+    fs.readFile(path, (err, data) => {
       res.writeHead(200, { "Content-Type": "image/jpeg;charset=utf-8" });
       res.end(data);
       if (err) throw err;

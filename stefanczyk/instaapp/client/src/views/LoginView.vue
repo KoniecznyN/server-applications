@@ -16,18 +16,23 @@
           </p>
         </b-field>
 
-        <section v-show="error">
-          <b-message
-            title="ERROR"
-            type="is-danger"
-            has-icon
-            aria-close-label="Close message"
-          >
-            {{ error }}
-          </b-message>
-        </section>
+        <b-loading
+          :is-full-page="false"
+          v-model="this.loading"
+          :can-cancel="false"
+        ></b-loading>
       </section>
     </form>
+    <b-message
+      v-if="error"
+      title="ERROR"
+      type="is-danger"
+      has-icon
+      aria-close-label="Close message"
+      class="message"
+    >
+      {{ error }}
+    </b-message>
   </div>
 </template>
 
@@ -39,10 +44,13 @@ export default {
       password: "",
       error: "",
       logged: "",
+      loading: false,
     };
   },
+  computed: {},
   methods: {
     onSubmit() {
+      this.loading = true;
       this.$store
         .dispatch("LOGIN_USER", {
           email: this.email,
@@ -57,11 +65,13 @@ export default {
           } else {
             this.logged = false;
             this.error = "Nieprawidłowe email lub hasło";
+            this.loading = false;
           }
         })
         .catch(() => {
           this.logged = false;
           this.error = "Nieprawidłowe email lub hasło";
+          this.loading = false;
         })
         .finally(() => {
           if (this.logged) {
@@ -76,13 +86,22 @@ export default {
 
 <style scoped>
 .main {
+  padding-top: 100px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 30px;
+  align-items: start;
 }
+
 form {
-  width: 50%;
+  width: 400px;
   height: 50%;
+  margin: 10px;
+}
+.message {
+  margin: 10px;
+  width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

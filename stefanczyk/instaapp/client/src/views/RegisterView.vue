@@ -23,8 +23,24 @@
             <b-button label="Submit" native-type="submit" type="is-primary" />
           </p>
         </b-field>
+
+        <b-loading
+          :is-full-page="false"
+          v-model="isLoading"
+          :can-cancel="false"
+        ></b-loading>
       </section>
     </form>
+    <b-message
+      v-show="this.message"
+      title="Success"
+      type="is-success"
+      aria-close-label="Close message"
+      class="message"
+    >
+      {{ this.message }} <br />
+      <a :href="this.url" target="_blank">{{ this.url }}</a>
+    </b-message>
   </div>
 </template>
 
@@ -37,10 +53,19 @@ export default {
       lastname: "",
       email: "",
       password: "",
+      message: "",
+      url: "",
+      loading: false,
     };
+  },
+  computed: {
+    isLoading() {
+      return this.loading;
+    },
   },
   methods: {
     onSubmit() {
+      this.loading = true;
       console.log(this.name);
       registerUser({
         name: this.name,
@@ -48,13 +73,15 @@ export default {
         email: this.email,
         password: this.password,
       })
-        .then((data) => console.log(data.message))
+        .then((data) => {
+          this.loading = false;
+          this.message = data.message;
+          this.url = data.url;
+        })
         .catch((err) => {
           throw err;
         })
-        .finally(() => {
-          this.$router.push("/login");
-        });
+        .finally();
     },
   },
 };
@@ -62,13 +89,23 @@ export default {
 
 <style scoped>
 .main {
+  padding-top: 100px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 30px;
+  align-items: start;
 }
+
 form {
-  width: 50%;
+  width: 400px;
   height: 50%;
+  margin: 10px;
+}
+
+.message {
+  margin: 10px;
+  width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

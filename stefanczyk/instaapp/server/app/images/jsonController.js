@@ -2,12 +2,13 @@ import { addPhoto } from "../model.js";
 import { deletePhoto } from "../model.js";
 import { patchPhoto } from "../model.js";
 import { addTagToPhoto } from "../model.js";
+import { addTag } from "../model.js";
 
 const jsonController = {
   add: async (data) => {
     const photo = {
       id: new Date().getTime(),
-      album: data.fields.album,
+      owner: data.user,
       originalName: data.files.file.name,
       url: data.url,
       lastChange: "original",
@@ -17,8 +18,12 @@ const jsonController = {
           lastModifiedDate: new Date().getTime(),
         },
       ],
-      tags: [],
+      tags: data.tags,
     };
+
+    data.tags.forEach((tag) => {
+      addTag(tag);
+    });
 
     addPhoto(photo);
     return new Promise((res) => {

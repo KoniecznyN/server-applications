@@ -1,5 +1,5 @@
 <template>
-  <b-navbar>
+  <b-navbar class="navbar">
     <template #brand>
       <b-navbar-item tag="router-link" :to="{ path: '/' }">
         <img
@@ -10,7 +10,7 @@
     </template>
     <template #start>
       <b-navbar-item href="#">
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/"> Home </RouterLink>
       </b-navbar-item>
       <b-navbar-item href="#">
         <RouterLink to="/about">About</RouterLink>
@@ -20,7 +20,9 @@
     <template #end>
       <b-navbar-item v-show="loggedUser">
         <b-icon icon="account" size="is-medium"> </b-icon>
-        <p>{{ loggedUser }}</p>
+        <RouterLink to="/profile"
+          ><p>{{ loggedUser }}</p></RouterLink
+        >
       </b-navbar-item>
       <b-navbar-item tag="div">
         <div class="buttons">
@@ -60,9 +62,16 @@ export default {
     logout() {
       this.$store.dispatch("LOGOUT_USER");
       localStorage.removeItem("token");
+      this.$router.push("/login");
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.navbar {
+  border-radius: 0;
+  background-color: rgb(233, 233, 233);
+  width: 100%;
+}
+</style>

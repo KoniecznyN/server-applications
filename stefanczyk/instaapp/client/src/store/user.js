@@ -49,14 +49,14 @@ const user = {
       commit("SET_CURRENT_USER", null);
       commit("SET_CURRENT_USER_TOKEN", null);
     },
-    FETCH_CURRENT_USER({ commit, getters }, { token }) {
+    async FETCH_CURRENT_USER({ commit, getters }, { token }) {
       if (getters.GET_CURRENT_USER) {
         return Promise.resolve();
       } else {
         commit("SET_CURRENT_USER_LOADING", true);
         return getCurrentUser(token)
           .then((userObject) => {
-            if (userObject != undefined) {
+            if (userObject) {
               commit("SET_CURRENT_USER", userObject.user);
               commit("SET_CURRENT_USER_TOKEN", userObject.token);
             }

@@ -1,3 +1,6 @@
+import path from "path";
+const __dirname = path.resolve();
+
 let photos = [];
 
 const addPhoto = (data) => {
@@ -79,13 +82,13 @@ const convertTags = (tags) => {
 let convertedTags = convertTags(tags);
 
 const addTag = (tag) => {
-  tag = JSON.parse(tag);
-  convertedTags.push({
-    id: tags.length,
-    name: tag.name,
-    popularity: tag.popularity,
-  });
-  tags.push(tag.name);
+  if (!tags.find((tagg) => tagg == tag)) {
+    convertedTags.push({
+      id: tags.length,
+      name: tag,
+    });
+    tags.push(tag);
+  }
 };
 
 let users = [];
@@ -98,6 +101,10 @@ const addUser = (data, password) => {
     email: data.email,
     confirmed: false,
     password: password,
+    rootPath: path.join(__dirname, "upload", data.email),
+    bio: "Ten użytkownik jest superowy, ponieważ korzysta z moje aplikacji",
+    profilepicture:
+      "C:/INNE/moje/szkoła/APLIKACJE/server-applications/stefanczyk/instaapp/server/profilepictures/default.jpg",
   });
 };
 
