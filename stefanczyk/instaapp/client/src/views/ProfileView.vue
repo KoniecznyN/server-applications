@@ -28,6 +28,19 @@
                   <br />
                   {{ userInfo.bio }}
                 </p>
+                <div class="buttons">
+                  <RouterLink to="/editProfile">
+                    <b-button
+                      class="mdi mdi-pencil-circle"
+                      label="Edit Profile"
+                      rounded
+                      inverted
+                      outlined
+                      type="is-primary"
+                      size="is-small"
+                    />
+                  </RouterLink>
+                </div>
               </div>
               <nav class="level is-mobile">
                 <div class="level-left">

@@ -15,7 +15,7 @@
       :rounded="rounded"
       style="padding: 0; margin: 0"
     ></b-image>
-    <b-taglist class="tag-list">
+    <b-taglist class="tag-list" v-show="this.photo.tags[0]">
       <b-tag
         v-for="tag in this.photo.tags"
         type="is-primary is-light"

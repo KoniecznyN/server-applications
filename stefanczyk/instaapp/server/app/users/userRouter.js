@@ -80,6 +80,63 @@ const userRouter = async (req, res) => {
     }
   }
 
+  //update user info
+  if (
+    req.url == "/api/user/updatepfp" &&
+    req.method == "POST" &&
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    let token = req.headers.authorization.split(" ")[1];
+
+    console.log(token);
+    let decoded = await userController.verifyToken(token);
+    let user = userController.getUser(decoded.decoded.email);
+
+    const updatedUser = await fileController.updateProfilePicture(req, user);
+    await userController.updateProfilePicture(updatedUser);
+
+    res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
+    res.end(
+      JSON.stringify({
+        user: user,
+        token: token,
+      })
+    );
+  }
+
+  //update danych uzytkownika
+  if (
+    req.url == "/api/user/update" &&
+    req.method == "POST" &&
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    let token = req.headers.authorization.split(" ")[1];
+
+    let decoded = await userController.verifyToken(token);
+    let user = userController.getUser(decoded.decoded.email);
+
+    const data = JSON.parse(await getRequestData(req));
+
+    if (data.name != "") {
+      user.name = data.name;
+    }
+
+    user.name = data.name || user.name;
+    user.lastname = data.lastname || user.lastname;
+    user.bio = data.bio || user.bio;
+
+    console.log(user);
+
+    res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
+    res.end(
+      JSON.stringify({
+        user: user,
+      })
+    );
+  }
+
   //pobranie usera
   if (req.url == "/api/user/currentuser" && req.method == "POST") {
     let token = await getRequestData(req);

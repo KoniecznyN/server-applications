@@ -17,6 +17,9 @@
         <b-field label="Password" label-position="on-border">
           <b-input v-model="password" maxlength="30" type="password"></b-input>
         </b-field>
+        <b-field label="Confirm password" label-position="on-border">
+          <b-input v-model="password2" maxlength="30" type="password"></b-input>
+        </b-field>
 
         <b-field>
           <p class="control">
@@ -41,6 +44,17 @@
       {{ this.message }} <br />
       <a :href="this.url" target="_blank">{{ this.url }}</a>
     </b-message>
+
+    <b-message
+      v-if="error"
+      title="ERROR"
+      type="is-danger"
+      has-icon
+      aria-close-label="Close message"
+      class="message"
+    >
+      {{ error }}
+    </b-message>
   </div>
 </template>
 
@@ -53,7 +67,9 @@ export default {
       lastname: "",
       email: "",
       password: "",
+      password2: "",
       message: "",
+      error: "",
       url: "",
       loading: false,
     };
@@ -65,23 +81,29 @@ export default {
   },
   methods: {
     onSubmit() {
+      this.error = "";
+      this.message = "";
       this.loading = true;
-      console.log(this.name);
-      registerUser({
-        name: this.name,
-        lastname: this.lastname,
-        email: this.email,
-        password: this.password,
-      })
-        .then((data) => {
-          this.loading = false;
-          this.message = data.message;
-          this.url = data.url;
+      if (this.password != this.password2) {
+        this.loading = false;
+        this.error = "Hasło nie jest takie samo";
+      } else {
+        registerUser({
+          name: this.name,
+          lastname: this.lastname,
+          email: this.email,
+          password: this.password,
         })
-        .catch((err) => {
-          throw err;
-        })
-        .finally();
+          .then((data) => {
+            this.loading = false;
+            this.message = data.message;
+            this.url = data.url;
+          })
+          .catch((err) => {
+            throw err;
+          })
+          .finally();
+      }
     },
   },
 };
@@ -89,7 +111,7 @@ export default {
 
 <style scoped>
 .main {
-  padding-top: 100px;
+  padding-top: 50px;
   display: flex;
   justify-content: center;
   align-items: start;

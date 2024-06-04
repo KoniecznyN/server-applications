@@ -1,4 +1,9 @@
-import { loginUser, getCurrentUser } from "@/api/index.js";
+import {
+  loginUser,
+  getCurrentUser,
+  updateUserInfo,
+  updateProfilePicture,
+} from "@/api/index.js";
 
 const user = {
   state() {
@@ -65,6 +70,27 @@ const user = {
             commit("SET_CURRENT_USER_LOADING", false);
           });
       }
+    },
+    UPDATE_USER_INFO({ commit, getters }, object) {
+      commit("SET_CURRENT_USER_LOADING", true);
+
+      return updateUserInfo(object)
+        .then((userObject) => {
+          if (userObject != undefined) {
+            commit("SET_CURRENT_USER", userObject.user);
+          }
+        })
+        .finally(() => {
+          commit("SET_CURRENT_USER_LOADING", false);
+        });
+    },
+    UPDATE_PROFILE_PICTURE({ commit, getters }, fd) {
+      commit("SET_CURRENT_USER_LOADING", true);
+      return updateProfilePicture(fd)
+        .then()
+        .finally(() => {
+          commit("SET_CURRENT_USER_LOADING", false);
+        });
     },
   },
 };

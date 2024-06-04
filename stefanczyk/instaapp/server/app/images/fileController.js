@@ -87,6 +87,31 @@ const fileController = {
       if (err) throw err;
     });
   },
+  updateProfilePicture: async (req, user) => {
+    let oldPath = "";
+    let newPath;
+
+    const options = {
+      uploadDir:
+        "C:/INNE/moje/szkoła/APLIKACJE/server-applications/stefanczyk/instaapp/server/profilepictures/",
+      multiples: true,
+      keepExtensions: true,
+      allowEmptyFiles: false,
+    };
+
+    return new Promise((res) => {
+      const form = formidable(options);
+      form.parse(req, function (err, fields, files) {
+        console.log(files);
+        let path = files.file.path;
+
+        res({
+          path: path,
+          user: user,
+        });
+      });
+    });
+  },
 };
 
 export { fileController };

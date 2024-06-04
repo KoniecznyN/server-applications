@@ -19,6 +19,11 @@ const userController = {
     const encryptedPassword = await userController.encryptPass(data.password);
     addUser(data, encryptedPassword);
   },
+  updateProfilePicture: (data) => {
+    let user = users.find((user) => data.user.email == user.email);
+    user.profilepicture = data.path;
+    console.log(users);
+  },
   getUser: (email) => {
     return users.find((user) => user.email == email);
   },
