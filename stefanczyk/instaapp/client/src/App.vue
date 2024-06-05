@@ -11,6 +11,16 @@ export default {
   data() {
     return {};
   },
+  mounted() {
+    window.onpopstate = (event) => {
+      if (
+        localStorage.getItem("token") == null &&
+        this.$route.path != "/login"
+      ) {
+        this.$router.push("/login"); // redirect to home, for example
+      }
+    };
+  },
   components: { Header, Footer },
   async beforeCreate() {
     let token = localStorage.getItem("token");
