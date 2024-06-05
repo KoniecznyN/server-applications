@@ -1,28 +1,26 @@
 <template>
   <div>
-    <b-loading
-      v-if="isLoading"
-      :is-full-page="false"
-      v-model="isLoading"
-      :can-cancel="false"
-    ></b-loading>
-    <section v-else>
-      <section class="hero is-small is-primary">
-        <div class="hero-body">
-          <p class="title">Home Page</p>
-          <p class="subtitle">Chcieli grać ale nie ta liga [...]</p>
-        </div>
-      </section>
+    <h1 v-show="!canLoad" class="title is-1">Login to see photos.</h1>
+    <div v-show="canLoad">
+      <b-loading
+        v-if="isLoading"
+        :is-full-page="false"
+        v-model="isLoading"
+        :can-cancel="false"
+      ></b-loading>
+      <section v-else>
+        <section class="hero is-small is-primary">
+          <div class="hero-body">
+            <p class="title">Home Page</p>
+            <p class="subtitle">Chcieli grać ale nie ta liga [...]</p>
+          </div>
+        </section>
 
-      <main>
-        <h1 v-show="!canLoad" class="title is-1">Login to see photos.</h1>
-        <PhotoTile
-          v-show="canLoad"
-          v-for="item in photosList"
-          :photo="item"
-        ></PhotoTile>
-      </main>
-    </section>
+        <main>
+          <PhotoTile v-for="item in photosList" :photo="item"></PhotoTile>
+        </main>
+      </section>
+    </div>
   </div>
 </template>
 
