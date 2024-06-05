@@ -1,4 +1,9 @@
-import { getAllPhotos, postPhoto, getUserPhotos } from "@/api/index.js";
+import {
+  getAllPhotos,
+  postPhoto,
+  getUserPhotos,
+  getOnePhoto,
+} from "@/api/index.js";
 
 const photos = {
   state() {
@@ -51,6 +56,19 @@ const photos = {
       commit("SET_PHOTOS_OBJECT_LOADING", true);
       return getUserPhotos()
         .then((photosObject) => {
+          if (photosObject) {
+            commit("SET_PHOTOS_OBJECT", photosObject);
+          }
+        })
+        .finally(() => {
+          commit("SET_PHOTOS_OBJECT_LOADING", false);
+        });
+    },
+    FETCH_ONE_PHOTO({ commit, getters }, id) {
+      commit("SET_PHOTOS_OBJECT_LOADING", true);
+      return getOnePhoto(id)
+        .then((photosObject) => {
+          console.log(photosObject);
           if (photosObject) {
             commit("SET_PHOTOS_OBJECT", photosObject);
           }

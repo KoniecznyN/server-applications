@@ -4,6 +4,7 @@ import RegisterView from "@/views/RegisterView.vue";
 import LoginView from "@/views/LoginView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import EditProfileView from "@/views/EditProfileView.vue";
+import PhotoView from "@/views/PhotoView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,11 @@ const router = createRouter({
       path: "/editProfile",
       name: "editProfile",
       component: EditProfileView,
+    },
+    {
+      path: "/photo/:id",
+      name: "photo",
+      component: PhotoView,
     },
   ],
 });

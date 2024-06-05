@@ -9,12 +9,9 @@
       </p>
     </header>
 
-    <b-image
-      :src="url"
-      :alt="url"
-      :rounded="rounded"
-      style="padding: 0; margin: 0"
-    ></b-image>
+    <router-link :to="`/photo/${this.photo.id}`"
+      ><b-image class="image" :src="url" :alt="url"></b-image
+    ></router-link>
     <b-taglist class="tag-list" v-show="this.photo.tags[0]">
       <b-tag
         v-for="tag in this.photo.tags"
@@ -64,5 +61,15 @@ export default {
 .tag-list {
   margin: 10px;
   padding: 0;
+}
+
+.image {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  transition: 0.3s;
+}
+.image:hover {
+  opacity: 80%;
 }
 </style>

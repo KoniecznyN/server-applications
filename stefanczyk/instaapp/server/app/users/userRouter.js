@@ -4,24 +4,38 @@ import { getRequestData } from "../getRequestData.js";
 import cookie from "cookie";
 import { decode } from "punycode";
 import { log } from "console";
+import { type } from "os";
 
 const userRouter = async (req, res) => {
   //rejestracja uzytkownika
   if (req.url == "/api/user/register" && req.method == "POST") {
     const data = JSON.parse(await getRequestData(req));
+    let ifExists = userController.getUser(data.email);
 
-    await userController.addUser(data);
-    let user = userController.getUser(data.email);
+    if (ifExists) {
+      res.end(
+        JSON.stringify({
+          message: "User with this email already exists",
+          type: "error",
+        })
+      );
+    } else {
+      console.log(data);
 
-    let token = await userController.createToken(user);
+      await userController.addUser(data);
+      let user = userController.getUser(data.email);
 
-    res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
-    res.end(
-      JSON.stringify({
-        message: `confirm user on:`,
-        url: `http://localhost:3000/api/user/confirm/${token}`,
-      })
-    );
+      let token = await userController.createToken(user);
+
+      res.writeHead(200, { "Content-Type": "text/plain;charset=utf-8" });
+      res.end(
+        JSON.stringify({
+          message: `Confirm user on:`,
+          url: `http://localhost:3000/api/user/confirm/${token}`,
+          type: "message",
+        })
+      );
+    }
   }
 
   //confirm uzytkownika

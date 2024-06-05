@@ -22,6 +22,7 @@
         >
       </RouterLink>
     </form>
+    <div style="border: 1px dashed lightgray; height: 100%"></div>
     <form @submit.prevent="onSubmitPhoto">
       <b-field label="Select profile picture" style="text-align: center">
         <b-upload v-model="file" required drag-drop>
@@ -113,6 +114,5 @@ export default {
 form {
   width: 400px;
   height: 50%;
-  margin: 10px;
 }
 </style>

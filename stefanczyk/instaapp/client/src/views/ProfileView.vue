@@ -10,15 +10,15 @@
       <section class="hero is-primary is-small">
         <div class="hero-body">
           <article class="media">
-            <figure class="media-left">
-              <p class="image is-64x64">
-                <img
-                  class="is-rounded"
-                  :src="profilePicture"
-                  :alt="profilePicture"
-                />
-              </p>
+            <figure class="media-left image is-128x128">
+              <img
+                class="is-rounded"
+                style="object-fit: cover; width: 128px; height: 128px"
+                :src="profilePicture"
+                :alt="profilePicture"
+              />
             </figure>
+
             <div class="media-content">
               <div class="content">
                 <p>

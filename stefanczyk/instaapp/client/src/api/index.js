@@ -108,6 +108,8 @@ const updateProfilePicture = async (fd) =>
 const updateUserInfo = async (object) =>
   await tokenPost("http://localhost:3000/api/user/update", object);
 
+const getOnePhoto = async (id) => get(`http://localhost:3000/api/photos/${id}`);
+
 export {
   registerUser,
   loginUser,
@@ -117,4 +119,5 @@ export {
   postPhoto,
   updateProfilePicture,
   updateUserInfo,
+  getOnePhoto,
 };

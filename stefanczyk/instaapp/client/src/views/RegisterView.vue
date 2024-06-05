@@ -46,14 +46,14 @@
     </b-message>
 
     <b-message
-      v-if="error"
+      v-show="error"
       title="ERROR"
       type="is-danger"
       has-icon
       aria-close-label="Close message"
       class="message"
     >
-      {{ error }}
+      {{ this.error }}
     </b-message>
   </div>
 </template>
@@ -96,7 +96,11 @@ export default {
         })
           .then((data) => {
             this.loading = false;
-            this.message = data.message;
+            if (data.type == "error") {
+              this.error = data.message;
+            } else {
+              this.message = data.message;
+            }
             this.url = data.url;
           })
           .catch((err) => {

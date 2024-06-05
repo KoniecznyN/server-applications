@@ -15,7 +15,12 @@
       </section>
 
       <main>
-        <PhotoTile v-for="item in photosList" :photo="item"></PhotoTile>
+        <h1 v-show="!canLoad" class="title is-1">Login to see photos.</h1>
+        <PhotoTile
+          v-show="canLoad"
+          v-for="item in photosList"
+          :photo="item"
+        ></PhotoTile>
       </main>
     </section>
   </div>
@@ -40,6 +45,14 @@ export default {
     },
     isLoading() {
       return this.$store.getters.GET_PHOTOS_OBJECT_LOADING;
+    },
+    canLoad() {
+      let token = localStorage.getItem("token");
+      console.log(token);
+      if (token == null) {
+        console.log(false);
+        return false;
+      } else return true;
     },
   },
 };
